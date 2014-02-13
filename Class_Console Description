@@ -10,7 +10,7 @@ Description:
 	a console-like Gui.
 
 Class:
-	Console(Name,x,y,w,h,[TimeFormat,Font,Fontsize])
+	Console(Name,x,y,w,h,[FormatTime,Font,Fontsize])
 Methods:
 	.append([text,delim,justify,pad,colsep])
 	.clear()
@@ -32,5 +32,5 @@ Notes:
    shows a close animation.
  * "debugType" is the type of information using AutoHotkey's Built-in logs for
    KeyHistory, ListVars (Vars), ListLines (Lines), and ListHotkeys (Hotkeys).
- * "TimeFormat" should be 0, 1 or any "TimeFormat" format. 0 = none. 1=A_Now (default)
-   otherwise format it according to the TimeFormat docs.
+ * "TimeFormat" should be 0, 1 or any "FormatTime" format. 0 = none. 1=A_Now (default)
+   otherwise format it according to the FormatTime docs.
