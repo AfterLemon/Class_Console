@@ -1,21 +1,19 @@
 class console
 {	Time:=A_Now
  
-	__new(Name,x,y,w,h,TimeFormat:=1,Font:="Courier New",FontSize:=10)
+	__new(Name,x,y,w,h,FormatTime:=1,Font:="Courier New",FontSize:=10)
 	{	global
 		If(Name="")
 		{	random,n,0
 			Name:="DebugID" n
-		}If(TimeFormat!=0&&TimeFormat!=1){
-			timeformat:=this.time
-			FormatTime,timeext,%timeformat%,%TimeFormat%
+		}If(TimeFormat!=0&&FormatTime!=1){
+			timetemp:=this.time
+			FormatTime,timeext,%timetemp%,%FormatTime%
 			this.timeext:=timeext
 		}else If(TimeFormat=1)
 			this.timeext:=this.time
-		Name2:=Name
-		,Name:=regExReplace(Name,"i)[^a-z0-9#_@$]{1,253}","_")
-		,this.Name:=Name
-		,this.edit:=Name this.time
+		Name2:=Name,Name:=regExReplace(Name,"i)[^a-z0-9#_@$]{1,253}","_")
+		,this.Name:=Name,this.edit:=Name this.time
 		Gui,% Name ":destroy"
 		Gui,% Name ":Font",s%FontSize% cDDDDDD,%Font%
 		Gui,% Name ":color",000000
