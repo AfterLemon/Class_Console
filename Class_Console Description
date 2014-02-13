@@ -1,0 +1,34 @@
+Name: Console
+Version 1.0 (Thu February 13, 2014)
+Created: Tue February 11, 2014
+Authors: AfterLemon tidbit
+Credit: tmplinshi - TV (edited by AfterLemon)
+ 
+Description:
+	A sort of debugging console for your script. Display variables, arrays, CSV 
+	and other delimited data, script info like Variables and Last Lines and more in 
+	a console-like Gui.
+ 
+Class:
+	Console(Name,x,y,w,h,[TimeFormat,Font,Fontsize])
+Methods:
+	.append([text,delim,justify,pad,colsep])
+	.clear()
+	.close([tv])
+	.destroy([tv])
+	.debug(debugType)
+	.log([text,delim,justify,pad,colsep])
+	.prepend([text,delim,justify,pad,colsep])
+	.pull()
+	.save([FileName,Overwrite (flag)])
+	.show([Show,TV])
+	.TV(HWND,[HeightStep,WidthStep,TVDef*])
+	.update(debugType)
+ 
+Notes:
+ * "TV" is an effect. An animation. setting it to 1 enables the effect (default)
+   and 0 disables it.
+ * "TV" method using TVDef allows for initial location, otherwise first-run it
+   shows a close animation.
+ * "debugType" is the type of information using AutoHotkey's Built-in logs for
+   KeyHistory, ListVars (Vars), ListLines (Lines), and ListHotkeys (Hotkeys).
