@@ -4,16 +4,16 @@ Basic Docs:
 |=======================|===================================================================================================|
 | All the below examples will use the console defined above. You may use any name you like in your code.                    |
 |=======================|===================================================================================================|
-| bbb.append            | Add text to the end of the console without a timestamp.                                           |
-| bbb.clear             | Remove all the text on the console.                                                               |
-| bbb.close             | Close the console but don't destroy it. Basically you Hide it.                                    |
-| bbb.destroy           | Destroy the console, it can not be shown until recreated.                                         |
-| bbb.debug             | Show AHK's debug info: KeyHistory, ListVars (Vars), ListLines (Lines), and ListHotkeys (Hotkeys). |
-| bbb.log               | Same as append, but with a timestamp.                                                             |
-| bbb.prepend           | Same as append, but adds the text to the TOP (line 1) of the console.                             |
-| bbb.pull              | Get the current console text.                                                                     |
-| bbb.save              | Save the console to a file.                                                                       |
-| bbb.show              | Show a closed or recently create console.                                                         |
-| bbb.TV                | This is an animation effect to show/hide the console.                                             |
-| bbb.update            | This is similar to doing a CLEAR and then LOG(DEBUG()). uses previous debug option                |
+| bbb.append()          | Add text to the end of the console without a timestamp.                                           |
+| bbb.clear()           | Remove all the text on the console.                                                               |
+| bbb.close()           | Close the console but don't destroy it. Basically you Hide it.                                    |
+| bbb.destroy()         | Destroy the console, it can not be shown until recreated.                                         |
+| bbb.debug()           | Show AHK's debug info: KeyHistory, ListVars (Vars), ListLines (Lines), and ListHotkeys (Hotkeys). |
+| bbb.log()             | Same as append, but with a timestamp.                                                             |
+| bbb.prepend()         | Same as append, but adds the text to the TOP (line 1) of the console.                             |
+| bbb.pull()            | Get the current console text.                                                                     |
+| bbb.save()            | Save the console to a file.                                                                       |
+| bbb.show()            | Show a closed or recently create console.                                                         |
+| bbb.TV()              | This is an animation effect to show/hide the console.                                             |
+| bbb.update()          | This is similar to doing a CLEAR and then LOG(DEBUG()).                                           |
 '---------------------------------------------------------------------------------------------------------------------------'
