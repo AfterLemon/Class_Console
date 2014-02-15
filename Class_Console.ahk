@@ -1,13 +1,3 @@
-#SingleInstance force
-
-o:={"deer":1,33:[11,{"q":1,"w":2,"e":3,1:4},2],"apple":"car"}
-
-a:=new console("a",32,32,400,400,0)
-a.show()
-a.log(o)
-return
-
-
 class console
 {	Time:=A_Now
  
@@ -181,9 +171,3 @@ AL_columnize(Data,delim="csv",justify=1,pad=" ",colsep=" | "){ ;Credit @ tidbit,
 		}out.="`r`n"
 }return SubStr(out,1,-2)
 }
-
-guiClose:
-esc::
-	exitApp
-return
-
