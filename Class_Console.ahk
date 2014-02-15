@@ -1,3 +1,13 @@
+#SingleInstance force
+
+o:={"deer":1,33:[11,{"q":1,"w":2,"e":3,1:4},2],"apple":"car"}
+
+a:=new console("a",32,32,400,400,0)
+a.show()
+a.log(o)
+return
+
+
 class console
 {	Time:=A_Now
  
@@ -146,10 +156,15 @@ class console
 st_printArr(array,depth:=5,indentLevel:="")
 {	static parent,sub,depthP
 	For k,v in (Array,(!depthP?depthP:=depth:""))
-		(depthP!=depth?sub+=1:(sub:=0,parent:="")),list.=(sub>=1?indentLevel "arr[" parent k "]":indentLevel "arr[" k "]"),((IsObject(v)&&depth>1)?(parent.=k ",",list.="`n" st_printArr(v,depth-1,indentLevel "    ")):list.=" = " v),list.="`n"
+		(depthP!=depth?sub+=1:(sub:=0,parent:="")),list.=(sub>=1?indentLevel "arr[" parent isStr(k) "]":indentLevel "arr[" isStr(k) "]"),((IsObject(v)&&depth>1)?(parent.=k ",",list.="`n" st_printArr(v,depth-1,indentLevel "    ")):list.=" = " v),list.="`n"
 	return RTrim(list,"`n")
 }
- 
+isStr(in){ ; returns the string wrapped in quotes if it is a string.
+	stringReplace,in,in,`,,,ALL
+	if in is not number
+		return """" in """"
+	else return in
+}
 AL_columnize(Data,delim="csv",justify=1,pad=" ",colsep=" | "){ ;Credit @ tidbit,compacted reduced code by AfterLemon
 	width:=[],Arr:=[],(InStr(justify,"|")?colMode:=StrSplit(justify,"|"):colMode:=justify)
 	Loop,parse,Data,`n,`r
@@ -166,3 +181,9 @@ AL_columnize(Data,delim="csv",justify=1,pad=" ",colsep=" | "){ ;Credit @ tidbit,
 		}out.="`r`n"
 }return SubStr(out,1,-2)
 }
+
+guiClose:
+esc::
+	exitApp
+return
+
