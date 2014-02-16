@@ -144,9 +144,10 @@ class console
 }
  
 st_printArr(array,depth:=5,indentLevel:="")
-{	static parent,sub,depthP
-	For k,v in (Array,(!depthP?depthP:=depth:""))
-		(depthP!=depth?sub+=1:(sub:=0,parent:="")),list.=(sub>=1?indentLevel "arr[" parent isStr(k) "]":indentLevel "arr[" isStr(k) "]"),((IsObject(v)&&depth>1)?(parent.=k ",",list.="`n" st_printArr(v,depth-1,indentLevel "    ")):list.=" = " v),list.="`n"
+{	static parent,pArr,depthP
+(!IsObject(pArr)?pArr:=[]:""),(!depthP?depthP:=depth:"")
+	For k,v in Array
+		(pArr[depth]:=(pArr[depth]="")?parent:pArr[depth]),(depthP=depth?parent:="":""),list.=(indentLevel "arr[" pArr[depth] isStr(k) "]"),((IsObject(v)&&depth>1)?(parent.=k ",",depthP:=depth,list.="`n" st_printArr(v,depth-1,indentLevel "    ")):list.= " = " v),list.="`n"
 	return RTrim(list,"`n")
 }
 isStr(in){ ; returns the string wrapped in quotes if it is a string.
