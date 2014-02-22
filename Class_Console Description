@@ -22,6 +22,8 @@ Methods:
 	.pull()
 	.save([FileName,Overwrite (flag)])
 	.show([Show,TV])
+	.StdOutFull([Command])
+	.StdOutStream([Command])
 	.TV(HWND,[HeightStep,WidthStep,TVDef*])
 	.update(debugType)
 
@@ -34,3 +36,5 @@ Notes:
    KeyHistory, ListVars (Vars), ListLines (Lines), and ListHotkeys (Hotkeys).
  * "TimeFormat" should be 0, 1 or any "FormatTime" format. 0 = none. 1=A_Now (default)
    otherwise format it according to the FormatTime docs.
+ * If [Command] is not passed to StdOutFull/StdOutStream it will not create a new
+   instance of the object, instead it will repeat the previous command.
