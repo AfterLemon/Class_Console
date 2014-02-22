@@ -109,17 +109,17 @@ class console
 	STDOutFull(Command:="")
 	{	If !(Command="")
 			this.objShell:=ComObjCreate("WScript.Shell"),this.STDCommand:=Command
-		this.objExec:=this.objShell.Exec(this.STDCommand)
-		While !this.objExec.Status
+		objExec:=this.objShell.Exec(this.STDCommand)
+		While !objExec.Status
 			Sleep,100
-		this.append(this.objExec.StdOut.ReadAll())
+		this.append(objExec.StdOut.ReadAll())
 	}
 	STDOutStream(Command:="")
 	{	If !(Command="")
 			this.objShell:=ComObjCreate("WScript.Shell"),this.STDCommand:=Command
-		this.objExec:=this.objShell.Exec(this.STDCommand)
-		While !this.objExec.StdOut.AtEndOfStream
-			this.append(this.objExec.StdOut.ReadLine())
+		objExec:=this.objShell.Exec(this.STDCommand)
+		While !objExec.StdOut.AtEndOfStream
+			this.append(objExec.StdOut.ReadLine())
 	}
 	TV(HWND,HeightStep:=100,WidthStep:=100,TVDef*)
 	{	static p:=[]
