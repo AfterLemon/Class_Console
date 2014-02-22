@@ -12,8 +12,7 @@ class console
 			this.timeext:=timeext
 		}else If(TimeFormat=1)
 			this.timeext:=this.time
-		Name2:=Name,Name:=regExReplace(Name,"i)[^a-z0-9#_@$]{1,253}","_")
-		,this.Name:=Name,this.edit:=Name this.time
+		Name2:=Name,Name:=RegExReplace(Name,"i)[^a-z0-9#_@$]{1,253}","_"),this.Name:=Name,this.edit:=Name this.time
 		Gui,% Name ":destroy"
 		Gui,% Name ":Font",s%FontSize% cDDDDDD,%Font%
 		Gui,% Name ":color",000000
@@ -106,6 +105,21 @@ class console
 			(Show?this.TV(this.hwnd,100,100,this.TVDef*):this.TV(this.hwnd,100,100))
 			DetectHiddenWindows,%DHW%
 		}else WinShow,ahk_id %HWND%
+	}
+	STDOutFull(Command:="")
+	{	If !(Command="")
+			this.objShell:=ComObjCreate("WScript.Shell"),this.STDCommand:=Command
+		this.objExec:=this.objShell.Exec(this.STDCommand)
+		While !this.objExec.Status
+			Sleep,100
+		this.append(this.objExec.StdOut.ReadAll())
+	}
+	STDOutStream(Command:="")
+	{	If !(Command="")
+			this.objShell:=ComObjCreate("WScript.Shell"),this.STDCommand:=Command
+		this.objExec:=this.objShell.Exec(this.STDCommand)
+		While !this.objExec.StdOut.AtEndOfStream
+			this.append(this.objExec.StdOut.ReadLine())
 	}
 	TV(HWND,HeightStep:=100,WidthStep:=100,TVDef*)
 	{	static p:=[]
