@@ -14,6 +14,8 @@ Basic Docs:
 | bbb.pull()            | Get the current console text.                                                                     |
 | bbb.save()            | Save the console to a file.                                                                       |
 | bbb.show()            | Show a closed or recently create console.                                                         |
+| bbb.stdoutfull()      | Create CMD with command and, when finished, append to console                                     |
+| bbb.stdoutstream()    | Create CMD with command and stream output line-by-line to console                                 |
 | bbb.TV()              | This is an animation effect to show/hide the console.                                             |
 | bbb.update()          | This is similar to doing a CLEAR and then LOG(DEBUG()).                                           |
 '---------------------------------------------------------------------------------------------------------------------------'
