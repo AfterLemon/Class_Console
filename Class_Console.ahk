@@ -1,18 +1,17 @@
 class console
 {	Time:=A_Now
- 
-	__new(Name,x,y,w,h,FormatTime:=1,Font:="Courier New",FontSize:=10)
+	__new(Name,x,y,w,h,TimeFormat:=1,Font:="Courier New",FontSize:=10)
 	{	global
 		If(Name="")
-		{	random,n,0
-			Name:="DebugID" n
-		}If(TimeFormat!=0&&FormatTime!=1){
-			timetemp:=this.time
-			FormatTime,timeext,%timetemp%,%FormatTime%
-			this.timeext:=timeext
-		}else If(TimeFormat=1)
-			this.timeext:=this.time
-		Name2:=Name,Name:=RegExReplace(Name,"i)[^a-z0-9#_@$]{1,253}","_"),this.Name:=Name,this.edit:=Name this.time
+			Name:="DebugID" this.Time
+		If(TimeFormat!=0&&TimeFormat!=1)
+			this.timeext:=TimeFormat
+		else If(TimeFormat=1)
+			this.timeext:=""
+		else If(TimeFormat=0)
+			this.timeext:=0
+		Name2:=Name,Name:=regExReplace(Name,"i)[^a-z0-9#_@$]{1,253}","_")
+		,this.Name:=Name,this.edit:=Name this.time
 		Gui,% Name ":destroy"
 		Gui,% Name ":Font",s%FontSize% cDDDDDD,%Font%
 		Gui,% Name ":color",000000
@@ -46,6 +45,25 @@ class console
 			this.TV(this.hwnd,100,100)
 		Gui,% this.Name ": cancel"
 	}
+	cmd(cmd:="",breakOn:="",AppendConsole:=1)
+	{	DllCall("RegisterShellHookWindow",UInt,A_ScriptHwnd),MsgNum:=DllCall("RegisterWindowMessage",Str,"SHELLHOOK"),OnMessage(MsgNum,"ShellMessage")
+		,(cmd!=""?(this.objShell:=ComObjCreate("WScript.Shell"),this.cmd:=cmd):cmd:=this.cmd),objExec:=this.objShell.Exec(cmd)
+		While(!objExec.StdOut.AtEndOfStream) ; read the output line by line
+		{	(AppendConsole?this.append(data:=objExec.StdOut.ReadLine()):""),all.=data "`n"
+			If(InStr(data,breakOn)&&breakOn!="")
+			{	OnMessage(MsgNum,"") ; stop tracking and return
+				return data
+		}}OnMessage(MsgNum,"") ; stop tracking and return
+		return trim(all,"`r`n")
+	}
+	cmdWait(cmd:="",AppendConsole:=1)
+	{	DllCall("RegisterShellHookWindow",UInt,A_ScriptHwnd),MsgNum:=DllCall("RegisterWindowMessage",Str,"SHELLHOOK"),OnMessage(MsgNum,"ShellMessage")
+		,(cmd!=""?(this.objShell:=ComObjCreate("WScript.Shell"),this.cmd:=cmd):cmd:=this.cmd),objExec:=this.objShell.Exec(cmd)
+		While(!objExec.Status) ; wait for output to finish
+			Sleep,50
+		OnMessage(MsgNum,""),(AppendConsole?this.append(data:=objExec.StdOut.ReadAll()):"")  ; stop tracking and append
+		return data
+	}
 	debug(debugType)
 	{	static id,pSFW,pSW,bkpSFW,bkpSW
 		ListLines,Off
@@ -75,12 +93,15 @@ class console
 		Gui,% this.Name ": destroy"
 	}
 	log(text:="",delim:="",justify:=1,pad:=" ",colsep:=" | ")
-	{	If(IsObject(text))
+	{	if (this.timeext!=0)
+			FormatTime,time,T0,% this.timeext
+		else time:=""
+		If(IsObject(text))
 			text:=st_PrintArr(text)
 		else If(delim!="")
 			text:=AL_Columnize(text,delim,justify,pad,colsep)
 		GuiControlGet,Data,% this.Name ":",% this.edit
-		GuiControl,% this.Name ":",% this.edit,% ((text~="^\s+$"||text="")?Data (this.timeext?"`n" this.timeext:"") "`n" text:trim(Data (this.timeext?"`n" this.timeext:"") "`n" text,"`r`n `t"))
+		GuiControl,% this.Name ":",% this.edit,% trim(Data "`n" time "`n" text,"`r`n `t")
 		SendMessage,0x115,7,0,Edit1,% "ahk_id " this.hwnd
 	}
 	prepend(text:="",delim:="",justify:=1,pad:=" ",colsep:=" | ")
@@ -93,7 +114,7 @@ class console
 	}
 	pull()
 	{	GuiControlGet,Data,% this.Name ":",% this.edit
-	return Data
+		return Data
 	}
 	save(FileName:="AutoHotkey Console Debug.txt",Overwrite:=1)
 	{	FileAppend,% this.pull(),%FileName%,%Overwrite%
@@ -106,20 +127,11 @@ class console
 			DetectHiddenWindows,%DHW%
 		}else WinShow,ahk_id %HWND%
 	}
-	STDOutFull(Command:="")
-	{	If !(Command="")
-			this.objShell:=ComObjCreate("WScript.Shell"),this.STDCommand:=Command
-		objExec:=this.objShell.Exec(this.STDCommand)
-		While !objExec.Status
-			Sleep,100
-		this.append(objExec.StdOut.ReadAll())
-	}
-	STDOutStream(Command:="")
-	{	If !(Command="")
-			this.objShell:=ComObjCreate("WScript.Shell"),this.STDCommand:=Command
-		objExec:=this.objShell.Exec(this.STDCommand)
-		While !objExec.StdOut.AtEndOfStream
-			this.append(objExec.StdOut.ReadLine())
+	timeSinceLastCall(id:=1,reset:=""){
+	static arr:={}
+		(reset?(arr[id,0]:="",arr[id,1]:="",arr[id,3]:=""):(arr[id,arr[id,2]:=!arr[id,2]]:=A_TickCount,time:=abs(arr[id,1]-arr[id,0])))
+	If(time!="")
+		this.append(time)
 	}
 	TV(HWND,HeightStep:=100,WidthStep:=100,TVDef*)
 	{	static p:=[]
@@ -151,17 +163,17 @@ class console
 			WinHide,ahk_id %HWND%
 			WinMove,ahk_id %HWND%,,% p[HWND].1,% p[HWND].2,% p[HWND].3,% p[HWND].4
 		}SetWinDelay,%WinDelay%
-	}
+	}	
 	update(debugType:="")
 	{	this.clear(),this.log(this.debug((debugType?debugType:this.debugprev)))
 	}
 }
  
-st_printArr(array,depth:=5,indentLevel:="")
+st_printArr(array,depth:=10,indentLevel:="")
 {	static parent,pArr,depthP
-(!IsObject(pArr)?pArr:=[]:""),(!depthP?depthP:=depth:"")
-	For k,v in Array
-		(pArr[depth]:=(pArr[depth]="")?parent:pArr[depth]),(depthP=depth?parent:="":""),list.=(indentLevel "arr[" pArr[depth] isStr(k) "]"),((IsObject(v)&&depth>1)?(parent.=k ",",depthP:=depth,list.="`n" st_printArr(v,depth-1,indentLevel "    ")):list.= " = " v),list.="`n"
+	For k,v in (Array,(!IsObject(pArr)?pArr:=[]:""),(!depthP?depthP:=depth:""))
+		((depthP=depth||depthP<depth)?parent:=SubStr(a:=SubStr(parent,1,InStr(parent,",",0,0)-1),1,InStr(a,",",0,0)):""),list.=(indentLevel "arr[" pArr[depth]:=parent isStr(k) "]")
+		,((IsObject(v)&&depth>1)?(parent.=k ",",depthP:=depth,list.="`n" st_printArr(v,depth-1,indentLevel "    ")):list.=" = " v),list.="`n"
 	return RTrim(list,"`n")
 }
 isStr(in){ ; returns the string wrapped in quotes if it is a string.
@@ -186,3 +198,13 @@ AL_columnize(Data,delim="csv",justify=1,pad=" ",colsep=" | "){ ;Credit @ tidbit,
 		}out.="`r`n"
 }return SubStr(out,1,-2)
 }
+
+
+; this is used for hiding the cmd window in the console.cmd() method.
+ShellMessage(wParam,lParam){
+	If(wParam=1)
+	{	WinGetClass,wclass,ahk_id %lParam%
+		If(wclass="ConsoleWindowClass")
+		{	winHide,ahk_id %lParam%
+			return
+}}}
