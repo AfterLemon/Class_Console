@@ -1,5 +1,5 @@
 Name: Console
-Version 1.2 (Sat February 22, 2014)
+Version 1.3 (Mon February 24, 2014)
 Created: Tue February 11, 2014
 Authors: AfterLemon tidbit
 Credit: tmplinshi - TV (edited by AfterLemon)
@@ -8,24 +8,6 @@ Description:
 	A sort of debugging console for your script. Display variables, arrays, CSV 
 	and other delimited data, script info like Variables and Last Lines and more in 
 	a console-like Gui.
-
-Class:
-	Console(Name,x,y,w,h,[FormatTime,Font,Fontsize])
-Methods:
-	.append([text,delim,justify,pad,colsep])
-	.clear()
-	.close([tv])
-	.destroy([tv])
-	.debug(debugType)
-	.log([text,delim,justify,pad,colsep])
-	.prepend([text,delim,justify,pad,colsep])
-	.pull()
-	.save([FileName,Overwrite (flag)])
-	.show([Show,TV])
-	.StdOutFull([Command])
-	.StdOutStream([Command])
-	.TV(HWND,[HeightStep,WidthStep,TVDef*])
-	.update(debugType)
 
 Notes:
  * "TV" is an effect. An animation. setting it to 1 enables the effect (default)
@@ -36,5 +18,3 @@ Notes:
    KeyHistory, ListVars (Vars), ListLines (Lines), and ListHotkeys (Hotkeys).
  * "TimeFormat" should be 0, 1 or any "FormatTime" format. 0 = none. 1=A_Now (default)
    otherwise format it according to the FormatTime docs.
- * If [Command] is not passed to StdOutFull/StdOutStream it will not create a new
-   instance of the object, instead it will repeat the previous command.
