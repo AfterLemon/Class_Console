@@ -1,20 +1,18 @@
 Name: Console
-Version 1.3 (Mon February 24, 2014)
+Version 1.5 (Fri February 28, 2014)
 Created: Tue February 11, 2014
 Authors: AfterLemon tidbit
-Credit: tmplinshi - TV (edited by AfterLemon)
+Credit:
 
 Description:
 	A sort of debugging console for your script. Display variables, arrays, CSV 
 	and other delimited data, script info like Variables and Last Lines and more in 
-	a console-like Gui.
+	a console-like Gui. You may also use the Command Bar to show info without needing to
+	call stuff from the program. You may also do math or modify variables content.
 
 Notes:
- * "TV" is an effect. An animation. setting it to 1 enables the effect (default)
-   and 0 disables it.
- * "TV" method using TVDef allows for initial location, otherwise first-run it
-   shows a close animation.
  * "debugType" is the type of information using AutoHotkey's Built-in logs for
    KeyHistory, ListVars (Vars), ListLines (Lines), and ListHotkeys (Hotkeys).
  * "TimeFormat" should be 0, 1 or any "FormatTime" format. 0 = none. 1=A_Now (default)
    otherwise format it according to the FormatTime docs.
+ * Easter eggs? No. There can't be. Don't even go looking because they don't exist. Bye.
