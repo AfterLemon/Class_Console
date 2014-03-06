@@ -2,14 +2,16 @@ Basic Docs:
 Stuff in [...]'s are optional.
 .--------------------------------------------------------------------------------------------------------------------------------------------------.
 | Class:                                                                                                                                           |
-| aaa:=new Console(Name,x,y,w,h [,TimeFormat,Font,Fontsize]) | This creates a new console object with the name of "aaa".                           |
+| aaa:=new Console(Name,x,y,w,h [,TimeFormat,HTML,Font,Fontsize]) | This creates a new console object with the name of "aaa".                      |
 |==================================================================================================================================================|
 | All the below stuff will use the console defined above. You may use any name you like in your code.                                              |
 |==================================================================================================================================================|
-| Methods:                                     |                                                                                                   |
+| Methods:                                     | Description:                                                                                      |
 | aaa.append([text,delim,justify,pad,colsep])  | Add text to the end of the console without a timestamp.                                           |
+| aaa.catch([line,var,value])                  | Detect when a variable is a certain value or when a certain line of code is executed.             |
 | aaa.clear()                                  | Remove all the text on the console.                                                               |
 | aaa.close()                                  | Close the console but don't destroy it. Basically you Hide it.                                    |
+| aaa.color([c])                               | Sets the text color for all below lines. See the table below for a color list. Default is white.  |
 | aaa.cmd(command [,breakOn,AppendConsole])    | Run (and return) a command-prompt command and get the input line-by-line.                         |
 | aaa.cmdWait(command [,AppendConsole])        | Run (and return) a command-prompt command and wait for it to fully finish.                        |
 | aaa.destroy()                                | Destroy the console, it can not be shown until recreated.                                         |
@@ -24,7 +26,18 @@ Stuff in [...]'s are optional.
 | aaa.timeSinceLastCall([id,reset])            | Get the amount of time (in MS) since the last time this function was called.                      |
 | aaa.update(debugType)                        | This is similar to doing a CLEAR and then LOG(DEBUG()).                                           |
 '--------------------------------------------------------------------------------------------------------------------------------------------------'
-
+.-----------------.
+| Name   | Color  |
+| ----------------|
+| yellow | yellow |
+| orange | orange |
+| white  | white  | <- default
+| red    | red    |
+| blue   | cyan   |
+| lime   | lime   |
+| green  | green  |
+| black  | black  |
+'-----------------'
 .----------------------------------------------------------------------------.
 | Command bar:                                                               |
 |   Type 'help' (without quotes) for a list of all command bar commands.     |
@@ -32,27 +45,30 @@ Stuff in [...]'s are optional.
 | Note: most of the methods above can be accessed through the command bar.   |
 |                                                                            |
 | Commands:                                                                  | 
-|-------------------.--------------------------------------------------------'------------------------------------------------------.
-| SetTimer          |  Run a [command] every N milliseconds (1000=1 second, 5000=5 seconds, etc).                                   |
-| Var               |  Print the value of a variable to the console. no %'s needed.                                                 |
-| Append            |  Add text to the end of the console. You may use variables such as %varName%.                                 |
-| Clear             |  Clear all text in the console.                                                                               |
-| Close             |  Close (or hide) the console. It can be re-shown.                                                             |
-| Cmd               |  You can ping, run programs, whatever you want. Output will go to the console. This gets stuff line-by-line.  |
-| CmdWait           |  Same as cmd  but this waits for the whole command to finish before printing to the console.                  |
-| Debug             |  Get various AHK debugging info such as Last Lines.                                                           |
-| Destroy           |  Destroy the console. It can NOT be re-shown.                                                                 |
-| Exit              |  Same as Destroy.                                                                                             |
-| Log               |  Add text to the bottom of the console with a formatted timestamp above the new text.                         |
-| Prepend           |  Adds text to the TOP of the log, not the bottom. No timestamp will be added.                                 '--------------------.
-| Pull              |  Pulls data from console window (line/lines specifies the line numbers) and saves it in a variable (or the clipboard).             |
-| Save              |  Save the console text to the specified file.                                                                                      |
-| Show              |  Show a specified closed (not destroyed) console or reshow the current one.                                                        |
-| TimeSinceLastCall |  X and Y are optional. Return the time in milliseconds since the last time this command was run.                                   |
-| Update            |  Uses last Debug UNIT, clearing the log and re-running the debug.                                                                  |
-| Operators         |  Create and/or do math or do other unforsaken things to variables, such as append text. You do not need to use quotes around text. |
-| ExitApp           |  Exits entire script.                                                                                                              |
-'---------------------------------------------------.----------------------------------------------------------------------------------------------------'
+|-------------------.--------------------------------------------------------'----------------------------------------------------.
+| SetTimer          | Run a [command] every N milliseconds (1000=1 second, 5000=5 seconds, etc).                                  |
+| Var               | Print the value of a variable to the console. no %'s needed.                                                |
+| Append            | Add text to the end of the console. You may use variables such as %varName%.                                |
+| Catch             | Detect when a variable is a certain value or when a certain line of text executes.                          |
+| Clear             | Clear all text in the console.                                                                              |
+| Close             | Close (or hide) the console. It can be re-shown.                                                            |
+| Color             | Sets the text color for all below lines.                                                                    |
+| Cmd               | You can ping, run programs, whatever you want. Output will go to the console. This gets stuff line-by-line. |
+| CmdWait           | Same as cmd  but this waits for the whole command to finish before printing to the console.                 |
+| Debug             | Get various AHK debugging info such as Last Lines.                                                          |
+| Destroy           | Destroy the console. It can NOT be re-shown.                                                                |
+| Exit              | Same as Destroy.                                                                                            |
+| Eval              | Evalutate a simple string as an expression. Supports: numbers + # - / *                                     |
+| Log               | Add text to the bottom of the console with a formatted timestamp above the new text.                        |
+| Prepend           | Adds text to the TOP of the log, not the bottom. No timestamp will be added.                                '---------------------.
+| Pull              | Pulls data from console window (line/lines specifies the line numbers) and saves it in a variable (or the clipboard).             |
+| Save              | Save the console text to the specified file.                                                                                      |
+| Show              | Show a specified closed (not destroyed) console or reshow the current one.                                                        |
+| TimeSinceLastCall | X and Y are optional. Return the time in milliseconds since the last time this command was run.                                   |
+| Update            | Uses last Debug UNIT, clearing the log and re-running the debug.                                                                  |
+| Operators         | Create and/or do math or do other unforsaken things to variables, such as append text. You do not need to use quotes around text. |
+| ExitApp           | Exits entire script.                                                                                                              |
+|---------------------------------------------------.---------------------------------------------------------------------------------------------------'
 | Examples:                         Examples:       |
 | 1) append hi                      | 6) clear      |
 | 2) log Hello %someVar%            | 7) log        |
