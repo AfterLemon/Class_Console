@@ -1,5 +1,5 @@
 Name: Console
-Version 1.5 (Fri February 28, 2014)
+Version 1.7 (Thu March 06, 2014)
 Created: Tue February 11, 2014
 Authors: AfterLemon tidbit
 Credit:
@@ -15,4 +15,4 @@ Notes:
    KeyHistory, ListVars (Vars), ListLines (Lines), and ListHotkeys (Hotkeys).
  * "TimeFormat" should be 0, 1 or any "FormatTime" format. 0 = none. 1=A_Now (default)
    otherwise format it according to the FormatTime docs.
- * Easter eggs? No. There can't be. Don't even go looking because they don't exist. Bye.
+ * YOu may use HTML and CSS (well, CSS mostly, not really html) to theme your console. Default is high-contrast light-on-dark. 
