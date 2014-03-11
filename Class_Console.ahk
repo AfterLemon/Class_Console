@@ -1,8 +1,52 @@
+/*
+Name:			[Class] Console
+Version:			1.8 (Tue March 11, 2014)
+Created:		Tue February 11, 2014
+Authors:		AfterLemon tidbit
+GitHub:			https://github.com/AfterLemon/Class_Console
+AutoHotkey:	http://www.autohotkey.com/board/topic/101881-class-console-standardized-console-gui-with-methods/
+AHKScript:		http://ahkscript.org/boards/viewtopic.php?f=6&t=2116&p=14026
+
+Functions Available:
+Class_Console		to build the console object - use this in place of Console:=new console()
+Desc_Console		to view the description of the class
+Methods_Console	to view the documentation for the methods
+*/
+
+If(A_ScriptName="Class_Console.ahk")
+{	Class_Console("Example",5,5,800,500),Example.Show()
+	,Example.append("`n" Desc_Console(),1),Example.append("`n" Methods_Console(),1),Example.color("list")
+	,Example.append("`n<span class='s1'>[Note: Command Bar can ONLY be used if the object is the same name as the Console.]</span>",1)
+	WinWaitClose,Console "DebugID Example"
+	ExitApp
+}
+
+Class_Console(Name,x,y,w,h,GuiTitle:="",Timestamp:=1,HTML:="",Font:="Courier New",FontSize:=10)
+{	return new console(Name,x,y,w,h,GuiTitle,Timestamp,HTML,Font,FontSize)
+}
+Desc_Console()
+{	static _,__,$,@
+	ListLines,Off
+			_:="<span class='c1'>",__:="<span class='c7'>",$:="</span>",@:="`n&nbsp;&nbsp;&nbsp;&nbsp;"
+	return	"<span class='h2'>Description:" $ @ "A sort of debugging console for your script. Display variables, arrays, CSV and other delimited data, script info like Variables and Last Lines and more in a console-like Gui. You may also use the Command Bar to show info without needing to call stuff from the program. You may also do math or modify variables content.`n`n<span class='h1'>Notes:" $ @ "* """ _ "debugType" $ """ is the type of information using AutoHotkey's Built-in logs" @ "KeyHistory, ListVars (Vars),"
+			.	" ListLines (Lines), and ListHotkeys (Hotkeys)`n" @ "* """ _ "Timestamp" $ """ should be 0, 1 or any """ __ "FormatTime" $ """ format." @ "0 = none. 1 = A_Now (default) otherwise format it according to the <a href=""http://www.autohotkey.com/docs/commands/FormatTime.htm"">FormatTime docs</a>.`n" @ "* You may use <span class='c1'>CSS" $ " and some <span class='c4'>HTML" $ " to theme your console." @ "Default is high-contrast light-on-dark. <span class='c9'>Backgrounds can also be modified." $
+}
+Methods_Console()
+{	static _,__,___,____,$,@
+	ListLines,Off
+			_:="`n`n<span class='c4'>",__:="<span class='c5'>",___:="<span class='c1'>",____:="<span class='c2'>",$:="</span>",@:="`n&nbsp;&nbsp;&nbsp;&nbsp;"
+	return	"<span class='h1'>Class:" $ @ __ "Class_Console" $ "(" ___ "Name,x,y,w,h" $ ____ " [,Timestamp,HTML,Font,Fontsize]" $ ")`n" @ "This creates a new console object with the name of """ ___ "Name" $ """.`n`nAll the below stuff will use the console defined above.`nYou may use any name you like in your code.`n`n<span class='h1'>Methods:" $ _ "aaa" $ "." __ "append" $ "(" ____ "[text,delim,justify,pad,colsep]" $ ")" @ "Add text to the end of the console without a timestamp." _ "aaa" $ "." __ "catch" $ "(" ____
+			.	"[line,var,value]" $ ")" @ "Detect when a variable is a certain value or a certain line of code is executed." _ "aaa" $ "." __ "clear" $ "()" @ "Remove all the text on the console." _ "aaa" $ "." __ "close" $ "()" @ "Close the console but don't destroy it. Basically you Hide it." _ "aaa" $ "." __ "color" $ "(" ____ "[c]" $ ")" @ "Sets text color for following lines. Default is white." @ "Specify ""list"" to see the color table." _ "aaa" $ "." __ "cmd" $ "(" ___ "command" $ ____ " [,breakOn,AppendConsole]"
+			.	$ ")" @ "Run (and return) a command-prompt command and get the input line-by-line." _ "aaa" $ "." __ "cmdWait" $ "(" ___ "command" $ ____ " [,AppendConsole]" $ ")" @ "Run (and return) a command-prompt command and wait for it to fully finish." _ "aaa" $ "." __ "destroy" $ "()" @ "Destroy the console, it can not be shown until recreated." _ "aaa" $ "." __ "debug" $ "(" ___ "debugType" $ ")" @ "Show AHK's debug info: KeyHistory, ListVars (Vars), ListLines (Lines), and ListHotkeys (Hotkeys)." _ "aaa" $ "." __ "eval" $
+			.	"(" ___ "In" $ ____ " [,Append]" $ ")" @ "Evaluate expression with numbers,+ # - / and *." _ "aaa" $ "." __ "log" $ "(" ____ "[text,delim,justify,pad,colsep]" $ ")" @ "Same as append, but with a timestamp." _ "aaa" $ "." __ "prepend" $ "(" ____ "[text,delim,justify,pad,colsep]" $ ")" @ "Same as append, but adds the text to the TOP (line 1) of the console." _ "aaa" $ "." __ "pull" $ "()" @ "Get the current console text." _ "aaa" $ "." __ "save" $ "(" ____ "[FileName,Overwrite (flag)]" $ ")" @ "Save the console to a file." _
+			.	"aaa" $ "." __ "show" $ "()" @ "Show a closed or recently created console." _ "aaa" $ "." __ "timeSinceLastCall" $ "(" ____ "[id,reset]" $ ")" @ "Get the amount of time (in MS) since the last time this function was called." _ "aaa" $ "." __ "update" $ "(" ___ "debugType" $ ")" @ "This is similar to doing a CLEAR and then LOG(DEBUG())."
+}
 class console
-{	__new(Name,x,y,w,h,Timestamp:=1,HTML:="",Font:="Courier New",FontSize:=10)
+{	__new(ObjVar,x,y,w,h,GuiTitle:="",Timestamp:=1,HTML:="",Font:="Courier New",FontSize:=10)
 	{	global
-		local Name2,S,MatchList,Check,Temp_,Temp_2,Gui,Gui_B,cmd,cmd2,Assign1,Assign2,Assign3,debugprev,DHW,textO,Check2,tc
-		ListLines,% ("Off",this.Time:=A_Now,this.WordList:=this.WordList1 this.WordList2,(Name=""?Name:="DebugID" this.Time:""),((Timestamp!=0&&Timestamp!=1)?this.timeext:=Timestamp:(Timestamp=1?this.timeext:="":(Timestamp=0?this.timeext:=0:""))),Name2:=Name,Name:=regExReplace(Name,"i)[^a-z0-9#_@$]{1,253}","_"),this.Name:=Name,this.edit:=Name this.time,this.tc:="c3")
+		static _,__,$,@,@@
+		local Name2,MatchList,Check,Temp_,Temp_2,Gui,Gui_B,cmd,cmd2,Assign1,Assign2,Assign3,debugprev,DHW,textO,Check2,tc,Console_Help1,Console_Help2,Console_Help3
+		ListLines,% ("Off",this.Time:=A_Now,this.WordList:=this.WordList1 this.WordList2,((Timestamp!=0&&Timestamp!=1)?this.timeext:=Timestamp:(Timestamp=1?this.timeext:="":(Timestamp=0?this.timeext:=0:""))),Name2:=(GuiTitle?GuiTitle:"DebugID " ObjVar),this.Name:=ObjVar,this.edit:=ObjVar this.time,this.tc:="c3",%ObjVar%:=this,_:="<span class='c1'>",__:="<span class='",$:="</span>",@:="&nbsp;",@@:=@ @ @ @)
 		If !html
 			html=
 			(ltrim
@@ -12,59 +56,62 @@ class console
 			<style type="text/css">
 			#bod {background-color:black;color:white;font:%FontSize%pt %Font%;}
 			p {margin:0;padding:0;}
-			.c1{color:yellow;}.c2{color:orange;}.c3{color:white;}.c4{color:red;}.c5{color:cyan;}.c6{color:lime;}.c7{color:green;}.c8{color:black;}
-			.h1{color:#BBBBBB;font-size:14pt;}
-			.h2{font-size:18pt;}
+			.c1{color:yellow;}.c2{color:orange;}.c3{color:white;}.c4{color:red;}.c5{color:cyan;}.c6{color:lime;}.c7{color:green;}.c8{color:#999999;}.c9{color:black;background-color:#DDDDDD}
+			.h1{color:yellow;font-size:14pt;}.h2{color:orange;font-size:14pt;}.h3{color:white;font-size:14pt;}.h4{color:red;font-size:14pt;}.h5{color:cyan;font-size:14pt;}.h6{color:lime;font-size:14pt;}.h7{color:green;font-size:14pt;}.h8{color:#999999;font-size:14pt;}.h9{color:black;background-color:#DDDDDD;font-size:14pt;}.h10{font-size:18pt;}
+			.s1{color:#BBBBBB;font-size:8pt;}
 			.dlim1{color:#444444;}
 			.num{color:#6666FF}
 			</style>
 			</head>
 			<body id="bod">
 			)
-		Gui,% Name ":Destroy"
-		Gui,% Name ":Font",s%FontSize% cDDDDDD,%Font%
-		Gui,% Name ":color",000000,000000
-		Gui,% Name ":add",activeX,% "x0 y-1 w" w " h" h-22 " -TabStop HScroll v" this.edit, MSHTML:
-		Gui,% Name ":add",edit,% "x-1 y" h-23 " w" w+2 "h22 -0x200 vcc" name
-		Gui,% Name ":add",button,default Hidden gSubCC,OK
-		Gui,% (Name ":-MinimizeBox +Border",this.Check2:=["","&nbsp;&nbsp;","&nbsp;&nbsp;&nbsp;","&nbsp;&nbsp;&nbsp;&nbsp;","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"])
-		Gui,% Name ":show",% "Hide x" x " y" y " w" (this.w:=w) " h" h,% ("Console """ Name2 """",this.fontsize:=FontSize,this.line:=0,Temp_:=this.edit,%Temp_%.write(this.html:=html),this.append("Type 'help' for a list of commands (no quotes)"))
-		ListLines,Off
+		Gui,% ObjVar ":Destroy"
+		Gui,% ObjVar ":Font",s%FontSize% cDDDDDD,%Font%
+		Gui,% ObjVar ":color",000000,000000
+		Gui,% ObjVar ":add",activeX,% "x0 y-1 w" w " h" h-22 " -TabStop HScroll v" this.edit, MSHTML:
+		Gui,% ObjVar ":add",edit,% "x-1 y" h-23 " w" w+2 "h22 -0x200 vcc" ObjVar
+		Gui,% ObjVar ":add",button,default Hidden gSubCC,OK
+		Gui,% (ObjVar ":-MinimizeBox +Border",this.Check2:=["",@ @,@ @ @,@@,@@ @])
+		Gui,% ObjVar ":show",% "Hide x" x " y" y " w" (this.w:=w) " h" h,% ("Console """ Name2 """",this.fontsize:=FontSize,this.line:=0,Temp_:=this.edit)
+		Console_Help1:={"!ExitApp": __ "c6'>Desc:" $ @ @ @ " Exits entire script.`n" __ "c5'>Syntax:" $ @ " ExitApp"
+			,"*Catch":__ "c6'>Desc:" $ @ @ @ " Detect when a variable is a certain value,`n" __ "c6'>OR" $ @@ @ @ " Detect when a line in ListLines exists.`n" __ "c5'>Syntax:" $ @ " catch var varName Value command`n" __ "c5'>Syntax:" $ @ " catch var line DebugLineNum Command`n" __ "c1'>Example:" $ " catch var d 4 prepend %d%`n" __ "c1'>Example:" $ " catch line 11 log line 11 was accessed!"
+			,"*Settimer":__ "c6'>Desc:" $ @ @ @ " Run a [command] every N milliseconds (1000=1 second, 5000=5 seconds, etc).`n" __ "c5'>Syntax:" $ @ " SetTimer N command`n" __ "c1'>Example:" $ " SetTimer 1000 var Banana"
+			,"?About":__ "c6'>Desc:" $ @ @ @ " Show information about this Console and its Creators.`n" __ "c5'>Syntax:" $ @ " About"
+			,Append:__ "c6'>Desc:" $ @ @ @ " Add text to the end of the console.`n" @@ @@ @ __ "s1'>You may use variables such as %varName%." $ "`n" __ "c5'>Syntax:" $ @ " Append Text`n" __ "c1'>Example:" $ " Append I'm at the end of the log! For now..."
+			,Clear:__ "c6'>Desc:" $ @ @ @ " Clear all text in the console.`n" __ "c5'>Syntax:" $ @ " Clear"
+			,Close:__ "c6'>Desc:" $ @ @ @ " Close (or hide) the console. It can be re-shown.`n" __ "c5'>Syntax:" $ @ " Close"
+			,Color:__ "c6'>Desc:" $ @ @ @ " Apply a color [N] to all below lines.`n" @@ @@ @ __ "s1'>Available colors: " __ "c1'>Yellow" $ ", " __ "c2'>Orange" $ ", " __ "c3'>White" $ ", " __ "c4'>Red" $ ", " __ "c5'>Blue" $ ", " __ "c6'>Lime" $ ", " __ "c7'>Green" $ ", " __ "c8'>Gray" $ ", " __ "c9'>Black" $ "." $ "`n" @@ @@ @ __ "s1'>Or type 'color list' for a visual list of all the colors." $ "`n" __ "c5'>Syntax:" $ @ " Color N|List`n" __ "c1'>Example:" $ " color " __ "c5'>blue" $ "`n" __ "c1'>Example:" $ " color list"
+			,Cmd:__ "c6'>Desc:" $ @ @ @ " Run cmd.exe commands here. You can ping, run programs, whatever you want. Output will go to the console. This gets stuff line-by-line.`n" __ "c5'>Syntax:" $ @ " cmd cmd.exe stuff`n" __ "c1'>Example:" $ " Cmd ipconfig"
+			,CmdWait:__ "c6'>Desc:" $ @ @ @ " Run cmd.exe commands here. You can ping, run programs, whatever you want. Output will go to the console. This waits for the whole command to finish before printing to the console.`n" __ "c5'>Syntax:" $ @ " CmdWait cmd.exe stuff`n" __ "c1'>Example:" $ " CmdWait ipconfig"}
+		Console_Help2:={Debug:__ "c6'>Desc:" $ @ @ @ " Get various AHK debugging info such as Last Lines.`n" @@ @@ @ "UNIT should be one of the following: Hotkeys, KeyHistory, Lines or Vars`n" __ "c5'>Syntax:" $ @ " debug UNIT`n" __ "c1'>Example:" $ " Debug Vars"
+			,Destroy:__ "c6'>Desc:" $ @ @ @ " Destroy the console. It can NOT be re-shown.`n" __ "c5'>Syntax:" $ @ " Destroy`n" __ "c1'>Example:" $ " Destroy"
+			,Log:__ "c6'>Desc:" $ @ @ @ " Add text to the end of the console with a formatted timestamp above the new text.`n" @@ @@ @ __ "s1'>You may use variables such as %varName%." $ "`n" __ "c5'>Syntax:" $ @ " Log Text`n" __ "c1'>Example:" $ " Log Some new data"
+			,Operators:__ "c6'>Desc:" $ @ @ @ " Create and/or do math or do other unforsaken things to variables, such as append text. You do not need to use quotes around text.`nAvailable Operators: := .= += -= *= /= //= &= ^= |=`n" __ "c5'>Syntax:" $ @ " var+=5`n" __ "c1'>Example:" $ " SomeVar.=New text at the end."
+			,Prepend:__ "c6'>Desc:" $ @ @ @ " Adds text to the TOP of the console, not the bottom.`n" @@ @@ @ __ "s1'>You may use variables such as %varName%." $ "`n" __ "c5'>Syntax:" $ @ " Prepend Text`n" __ "c1'>Example:" $ " Prepend I'M ON TOP OF THE WOR... CONSOLE!"
+			,Pull:__ "c6'>Desc:" $ @ @ @ " Pulls data from console window (line/lines specifies the line numbers) and saves it in a variable (or the clipboard).`n" __ "c5'>Syntax:" $ @ " Pull [lines|line First-Last|N] VarName|Clipboard`n" __ "c1'>Example:" $ " Pull banana`n" __ "c1'>OR" $ @@ @ @ @ "Pull lines 1-10 banana`n" __ "c1'>OR" $ @@ @ @ @ "Pull line 3 banana"
+			,Run:__ "c6'>Desc:" $ @ @ @ " Runs a label within the script.`n" __ "c5'>Syntax:" $ @ " Run Label`n" __ "c1'>Example:" $ " Run BananaLabel -> BananaLabel: ...."
+			,Save:__ "c6'>Desc:" $ @ @ @ " Save the console text to the specified file.`n" __ "c5'>Syntax:" $ @ " Save Filepath`n" __ "c1'>Example:" $ " Save C:\blah\log.txt"
+			,Show:__ "c6'>Desc:" $ @ @ @ " Show a specified closed (not destroyed) console or reshow the current one.`n" __ "c5'>Syntax:" $ @ " Show NAME`n" __ "c1'>Example:" $ " Show Variable"
+			,TimeSinceLastCall:__ "c6'>Desc:" $ @ @ @ " ID and Reset are optional. Appends time in milliseconds since the last time this command was run.`n" __ "c5'>Syntax:" $ @ " TimeSinceLastCall ID Reset`n" __ "c1'>Example:" $ " TimeSinceLastCall 1"
+			,Update:__ "c6'>Desc:" $ @ @ @ " Uses last Debug UNIT, clearing the log and re-running the debug.`n" __ "c5'>Syntax:" $ @ " Update`n" __ "c1'>Example:" $ " Debug vars --> SetTimer 3000 Update"
+			,Var:__ "c6'>Desc:" $ @ @ @ " Print the value of a variable to the console. no %'s needed.`n" @@ @@ @ "-1 = Prepend, 1 = Log. Default is Append.`n" __ "c5'>Syntax:" $ @ " Var VariableName (-1,0,1)`n" __ "c1'>Example:" $ " Var Banana"}
+		For Assign1,Assign2 in (Console_Help1,this.Console_Help:={})
+			this.Console_Help[Assign1]:=Assign2
+		For Assign1,Assign2 in Console_Help2
+			this.Console_Help[Assign1]:=Assign2
 		DetectHiddenWindows,% ("On",DHW:=A_DetectHiddenWindows)
-		DetectHiddenWindows,% (DHW,this.HWND:=WinExist("Console """ Name2 """"))
-		this.Console_Help:={"!ExitApp":"<span class='c1'>Syntax:</span> ExitApp`n<span class='c1'>Desc:</span> Exits entire script."
-			,"*Catch":"<span class='c1'>Syntax:</span>catch var varName Value command`n<span class='c1'>Syntax:</span>catch var line DebugLineNum Command`n<span class='c1'>Desc:</span> Detect when a variable is a certain value, OR when a line in ListLines exists.`n<span class='c1'>Example:</span>catch var d 4 prepend %d%`n<span class='c1'>Example:</span>catch line 11 log line 11 was accessed!"
-			,"*Settimer":"<span class='c1'>Syntax:</span> SetTimer N command.`n<span class='c1'>Desc:</span> Run a [command] every N milliseconds (1000=1 second, 5000=5 seconds, etc).`n<span class='c1'>Example:</span> SetTimer 1000 var Banana"
-			,Append:"<span class='c1'>Syntax:</span> Append NewText.`n<span class='c1'>Desc:</span> Add text to the end of the console. You may use variables such as %varName%.`n<span class='c1'>Example:</span> Append I'm at the end of the log! For now..."
-			,Clear:"<span class='c1'>Syntax:</span> Clear.`n<span class='c1'>Desc:</span> Clear all text in the console.`n<span class='c1'>Example:</span> Clear"
-			,Close:"<span class='c1'>Syntax:</span> Close.`n<span class='c1'>Desc:</span> Close (or hide) the console. It can be re-shown.`n<span class='c1'>Example:</span> Close"
-			,Color:"<span class='c1'>Syntax:</span>Color N.`n<span class='c1'>Desc:</span>Apply a color to all below lines. Available colors: Yellow, Orange, White, Red, Blue, Lime, Green, Black.`n<span class='c1'>Example:</span> color blue"
-			,Cmd:"<span class='c1'>Syntax:</span> cmd cmd.exe stuff.`n<span class='c1'>Desc:</span> Run cmd.exe commands here. You can ping, run programs, whatever you want. Output will go to the console. This gets stuff line-by-line.`n<span class='c1'>Example:</span> Cmd ipconfig"
-			,CmdWait:"<span class='c1'>Syntax:</span> CmdWait cmd.exe stuff.`n<span class='c1'>Desc:</span> Run cmd.exe commands here. You can ping, run programs, whatever you want. Output will go to the console. This waits for the whole command to finish before printing to the console.`n<span class='c1'>Example:</span> CmdWait ipconfig"
-			,Debug:"<span class='c1'>Syntax:</span> debug UNIT.`n<span class='c1'>Desc:</span> Get various AHK debugging info such as Last Lines.`nUNIT should be one of the following: Hotkeys, KeyHistory, Lines or Vars`n<span class='c1'>Example:</span> Debug Vars"
-			,Destroy:"<span class='c1'>Syntax:</span> Destroy.`n<span class='c1'>Desc:</span> Destroy the console. It can NOT be re-shown.`n<span class='c1'>Example:</span> Destroy"
-			,Log:"<span class='c1'>Syntax:</span> Log NewText.`n<span class='c1'>Desc:</span> Add text to the end of the console with a formatted timestamp above the new text. You may use variables such as %varName%.`n<span class='c1'>Example:</span> Log Some new data"
-			,Operators:"<span class='c1'>Syntax:</span> var+=5`n<span class='c1'>Desc:</span> Create and/or do math or do other unforsaken things to variables, such as append text. You do not need to use quotes around text.`nAvailable Operators: := .= += -= *= /= //= &= ^= |=`n<span class='c1'>Example:</span> SomeVar.=New text at the end."
-			,Prepend:"<span class='c1'>Syntax:</span> Prepend NewText.`n<span class='c1'>Desc:</span> Adds text to the TOP of the log, not the bottom. No timestamp will be added. You may use variables such as %varName%.`n<span class='c1'>Example:</span> Prepend I'M ON TOP OF THE WOR... CONSOLE!"
-			,Pull:"<span class='c1'>Syntax:</span> Pull [lines|line First-Last|N] VarName|Clipboard`n<span class='c1'>Desc:</span> Pulls data from console window (line/lines specifies the line numbers) and saves it in a variable (or the clipboard).`n<span class='c1'>Example:</span> Pull banana`n      OR Pull lines 1-10 banana`n      OR Pull line 3 banana"
-			,Run:"<span class='c1'>Syntax:</span> Run Label`n<span class='c1'>Desc:</span> Runs a label within the script.`n<span class='c1'>Example:</span> Run BananaLabel -> BananaLabel: ...."
-			,Save:"<span class='c1'>Syntax:</span> Save Filepath.`n<span class='c1'>Desc:</span> Save the console text to the specified file.`n<span class='c1'>Example:</span> Save C:\blah\log.txt"
-			,Show:"<span class='c1'>Syntax:</span> Show NAME.`n<span class='c1'>Desc:</span> Show a specified closed (not destroyed) console or reshow the current one.`n<span class='c1'>Example:</span> Show Variable"
-			,TimeSinceLastCall:"<span class='c1'>Syntax:</span> TimeSinceLastCall [X Y]`n<span class='c1'>Desc:</span> X and Y are optional. Return the time in milliseconds since the last time this command was run.`n<span class='c1'>Example:</span> TimeSinceLastCall"
-			,Update:"<span class='c1'>Syntax:</span> Update`n<span class='c1'>Desc:</span> Uses last Debug UNIT, clearing the log and re-running the debug.`n<span class='c1'>Example:</span> Debug vars --> SetTimer 3000 Update"
-			,Var:"<span class='c1'>Syntax:</span> Var VariableName.`n<span class='c1'>Desc:</span> Print the value of a variable to the console. no %'s needed.`n<span class='c1'>Example:</span> Var Banana"}
-		ListLines,On
-		return this
+		DetectHiddenWindows,% (DHW,this.HWND:=WinExist("Console """ Name2 """"),%Temp_%.write(this.html:=html),this.append("Type 'help' for a list of commands (no quotes)"))
+		return 1
 		TimerSubCC:
 		SubCC:
 			ListLines,Off
 			If(A_ThisLabel!="TimerSubCC")
 			{	Gui,% A_Gui ":Submit",NoHide
-				GuiControl,,% ("cc" A_Gui,Gui:=A_Gui)
+				GuiControl,,% ("cc" A_Gui,Gui:=%A_Gui%.Name)
 			}else cc%Gui%:=cc%Gui%_B,Gui:=Gui_B
 			For Temp_ in ((InStr(cc%Gui%," ")?cmd:=StrSplit(cc%Gui%,[" ","`t"]):(cmd:=[],cmd[1]:=(InStr(cc%Gui%,",")?SubStr(cc%Gui%,1,InStr(cc%Gui%,",")-1):cc%Gui%))),cmd2:=StrSplit((InStr(cc%Gui%," ")?SubStr(cc%Gui%,InStr(cc%Gui%," ")+1):cc%Gui%),","))
 				(cmd[Temp_]=""?cmd.remove(Temp_):"")
-			If(RegExReplace(cc%Gui%,".=")!=cc%Gui%)
+			If(RegExReplace(cc%Gui%,".=")!=cc%Gui%,%Gui%.cls:=%Gui%.clear,%Gui%.exit:=%Gui%.destroy)
 			{	SetFormat,FloatFast,0.18
 				Transform,Assign3,deref,% SubStr(cc%Gui%,InStr(cc%Gui%,"=")+1)
 				Assign1:=SubStr(cc%Gui%,1,InStr(cc%Gui%,"=")-2),Assign2:=SubStr(cc%Gui%,InStr(cc%Gui%,"=")-1,2),%Assign1%:=%Gui%.eval((Assign2=":="?Assign3:(Assign2="+="?%Assign1%+Assign3:(Assign2="-="?%Assign1%-Assign3:(Assign2="*="?%Assign1%*Assign3:(Assign2="/="?%Assign1%/Assign3:(Assign2="//="?%Assign1%//Assign3:(Assign2=".="?%Assign1% Assign3:(Assign2="|="?%Assign1%|Assign3:(Assign2="&="?%Assign1%&Assign3:(Assign2="^="?%Assign1%^Assign3:"")))))))))))
@@ -75,70 +122,54 @@ class console
 				cc%Gui%_B:=RTrim(cc%Gui%_B," ")
 				SetTimer,TimerSubCC,%Temp_%
 			}else If(cmd[1]="var")
-				Temp_:=cmd[2],%Gui%.append(%Temp_%)
-			else If(cmd[1]="append")
-			{	Transform,Temp_,deref,% (InStr(cmd2[1]," ")?cmd2[1]:(cmd[2]?cmd[2]:(cmd2[2],cmd2[2]:=cmd2[3],cmd2[3]:=cmd2[4],cmd2[4]:=cmd2[5],cmd2[5]:=cmd2[6],cmd2[6]:=cmd2[7])))
-				%Gui%.append((Temp_?Temp_:""),(cmd2[2]?cmd2[2]:0),(cmd2[3]?cmd2[3]:""),(cmd2[4]?cmd2[4]:1),(cmd2[5]?cmd2[5]:" "),((cmd2[6]?cmd2[6]:" | ")))
-			}else If(cmd[1]="catch")
+				Temp_:=cmd[2],%Gui%[(cmd[3]=1?"log":(cmd[3]="-1"?"prepend":"append"))](%Temp_%)
+			else If(cmd[1]="about")
+				%Gui%.append(__ "c2'>Name:" $ @@ @@ __ "c5'>[Class] Console`n" $ __ "c2'>Version:" $ @@ @ __ "c6'>1.8 " $ __ "c1'>(Tue March 11, 2014)`n" __ "c2'>Created:" $ @@ @ __ "c1'>Tue February 11, 2014`n" $ __ "c2'>Authors:" $ @@ @ __ "c4'>AfterLemon tidbit`n" $ __ "c2'>GitHub:" $ @@ @ @ "<a href=""https://github.com/AfterLemon/Class_Console"">Class_Console on GitHub</a>"
+								.	"`n" __ "c2'>AutoHotkey:" $ @ @ "<a href=""http://www.autohotkey.com/board/topic/101881-class-console-standardized-console-gui-with-methods/"">Class_Console on AutoHotkey</a>`n" __ "c2'>AHKScript:" $ @ @ @ "<a href=""http://ahkscript.org/boards/viewtopic.php?f=6&t=2116&p=14026"">Class_Console on AHKScript</a>" $,1)
+			else If(cmd[1]="catch")
 				(cmd[2]="line"?%Gui%.catch(cmd[3]):(cmd[2]="var"?%Gui%.catch("",cmd[3],cmd[4]):""))
-			else If(cmd[1]="clear")
-				%Gui%.clear()
-			else If(cmd[1]="close")
-				%Gui%.close((cmd[2]?cmd[2]:1))
-			else If(cmd[1]="color")
-				%Gui%.color((cmd[2]?cmd[2]:""))
 			else If(cmd[1]="cmd")
 				%Gui%.cmd((cmd2[1]?cmd2[1]:""),(cmd2[2]?cmd2[2]:""),(cmd2[3]?cmd2[3]:1))
-			else If(cmd[1]="cmdwait")
-				%Gui%.cmdWait((cmd2[1]?cmd2[1]:""),(cmd2[2]?cmd2[2]:1))
 			else If(cmd[1]="debug")
 				%Gui%.log(%Gui%.debug(cmd[2]))
-			else If(cmd[1]="destroy"||cmd[1]="exit")
-				%Gui%.destroy((cmd[2]?cmd[2]:1))
+			else If(cmd[1]="desc")
+				%Gui%.append(Desc_Console())
 			else If(cmd[1]="exitapp")
-				exitapp
+				ExitApp
 			else If(cmd[1]="help")
-			{	If !(cmd[2]=""||cmd[2]="All")
-				{	If !Temp_:=%Gui%.Console_Help[cmd[2]]
-						Msgbox,% "Help """ cmd[2] """ does not exist. Type 'help' for a list."
-					else %Gui%.append("<span class='h1'>[" cmd[2] "]</span><br/>`n&nbsp;&nbsp;&nbsp;&nbsp;" RegExReplace(Temp_,"`n","`n&nbsp;&nbsp;&nbsp;&nbsp;"))
-				}else
+			{	If (cmd[2]=""||cmd[2]="All")
 				{	For Temp_,Check in %Gui%.Console_Help
-						Assign1.="`n<span class='h1'>[" Temp_ "]</span><br/>`n&nbsp;&nbsp;&nbsp;&nbsp;" RegExReplace(Check,"`n","`n&nbsp;&nbsp;&nbsp;&nbsp;")
-					%Gui%.append("<span class='h2'>ConsoleBar_Commands</span>" Assign1 "`n<br/>`n-----"),Assign1:=""
-			}}else If(cmd[1]="log")
-			{	Transform,Temp_,deref,% (InStr(cmd2[1]," ")?cmd2[1]:(cmd[2]?cmd[2]:(cmd2[2],cmd2[2]:=cmd2[3],cmd2[3]:=cmd2[4],cmd2[4]:=cmd2[5],cmd2[5]:=cmd2[6],cmd2[6]:=cmd2[7])))
-				%Gui%.log((Temp_?Temp_:""),(cmd2[2]?cmd2[2]:0),(cmd2[3]?cmd2[3]:""),(cmd2[4]?cmd2[4]:1),(cmd2[5]?cmd2[5]:" "),(cmd2[6]?cmd2[6]:" | "))
-			}else If(cmd[1]="prepend")
-			{	Transform,Temp_,deref,% (InStr(cmd2[1]," ")?cmd2[1]:(cmd[2]?cmd[2]:(cmd2[2],cmd2[2]:=cmd2[3],cmd2[3]:=cmd2[4],cmd2[4]:=cmd2[5],cmd2[5]:=cmd2[6],cmd2[6]:=cmd2[7])))
-				%Gui%.prepend((Temp_?Temp_:""),(cmd2[2]?cmd2[2]:1),(cmd2[3]?cmd2[3]:""),(cmd2[4]?cmd2[4]:1),(cmd2[5]?cmd2[5]:" "),(cmd2[6]?cmd2[6]:" | "))
-			}else If(cmd[1]="pull")
+						Assign2:=SubStr(Temp_,1,1),Assign1.="`n" __ (Assign2="!"?"h4":(Assign2="*"?"h2":(Assign2="?"?"h7":"h8"))) "'>[" Temp_ "]" $ "<br/>`n" @@ RegExReplace(Check,"`n","`n" @@)
+					%Gui%.append(__ "h10'>ConsoleBar_Commands" $ Assign1 "<br/>`n----------------")
+				}else
+				{	If Temp_:=%Gui%.Console_Help[Temp_2:=(cmd[2]="ExitApp"?"!ExitApp":(cmd[2]~="Catch|SetTimer"?"*" cmd[2]:(cmd[2]="About"?"?About":cmd[2])))]
+						Assign2:=SubStr(Temp_2,1,1),%Gui%.append(__ (Assign2="!"?"h4":(Assign2="*"?"h2":(Assign2="?"?"h7":"h8"))) "'>[" Temp_2 "]" $ "<br/>`n" @@ RegExReplace(Temp_,"`n","`n" @@))
+					else Msgbox,% "Help """ cmd[2] """ does not exist. Type 'help' for a list."
+			}}else If(cmd[1]="methods")
+				%Gui%.append(Methods_Console(),1)
+			else If(cmd[1]="pull")
 			{	If(cmd[2]="lines"||cmd[2]="line")
-				{	Loop,parse,Temp_,`n,% ("`r",Temp_:=%Gui%.pull(),Check:=SubStr(cmd[3],InStr(cmd[3],"-")+1),Temp_2:=0)
-					{	If(A_LoopField="")
-							Continue
-						else Temp_2++
-						If(Temp_2>=SubStr(cmd[3],1,(cmd[2]="line"?StrLen(cmd[3]):InStr(cmd[3],"-")-1))&&(cmd[2]="line"?Temp_2<cmd[3]+1:(Temp_2<=Check||Check="End"||Check="Last")))
-						{	If(cmd[4]="clipboard")
-							{	Clipboard:="",Clipboard.=(cmd[2]="line"?"":"`n") A_LoopField
-								ClipWait
-							}else Temp_:=cmd[4],%Temp_%.=(cmd[2]="line"?"":"`n") A_LoopField
-						}else If(Temp_2>(cmd[2]="line"?cmd[3]:Check))
-							break
-				}}else If(cmd[2]="clipboard")
-				{	Clipboard:=%Gui%.pull()
-					ClipWait
-				}else Temp_:=cmd[2],%Temp_%:=%Gui%.pull()
-			}else If(cmd[1]="run")
-				%Gui%.run((cmd[2]?cmd[2]:""))
-			else If(cmd[1]="save")
-				%Gui%.save((cmd2[2]?cmd2[2]:A_ScriptDir "\AutoHotkey Console Debug.txt"),(cmd2[3]?cmd2[3]:""),(cmd2[2]?cmd2[2]:0))
-			else If(cmd[1]="show")
-				%Gui%.show((cmd2[1]?cmd2[1]:1),(cmd2[2]?cmd2[2]:1))
+				{	Loop,parse,Temp_,`n,% ("`r",Temp_:=%Gui%.pull(),Check:=SubStr(cmd[3],InStr(cmd[3],"-")+1))
+					{	If !(A_LoopField=""||A_Index<Assign1:=SubStr(cmd[3],1,(cmd[2]="line"?StrLen(cmd[3]):InStr(cmd[3],"-")-1)))
+						{	If((A_Index>(cmd[2]="line"?Assign1:Check))||(Check="End"||Check="Last"))
+								break
+							If(cmd[4]="clipboard",(A_Index=Assign1?Clipboard:="":""))
+								ClipWait,% ("",Clipboard.=(cmd[2]="line"?"":"`n") A_LoopField)
+							else Temp_:=cmd[4],%Temp_%.=(cmd[2]="line"?"":"`n") A_LoopField
+				}}}else If(cmd[2]="clipboard")
+					ClipWait,% ("",Clipboard:=%Gui%.pull())
+				else Temp_:=cmd[2],%Temp_%:=%Gui%.pull()
+			}else If(cmd[1]="save")
+				%Gui%.save((cmd2[2]?cmd2[2]:(cmd[2]?cmd[2]:A_ScriptDir "\AutoHotkey Console Debug.txt")),(cmd2[3]?cmd2[3]:""),(cmd2[4]?cmd2[4]:0))
 			else If(cmd[1]="timesincelastcall")
 				%Gui%.timesincelastcall((cmd2[1]?cmd2[1]:1),(cmd2[2]?cmd2[2]:""))
-			else If(cmd[1]="update")
-				%Gui%.update((cmd[2]?cmd[2]:""))
+			else If(cmd[1]~="append|log|prepend")
+			{	Transform,Temp_,deref,% (InStr(cmd2[1]," ")?cmd2[1]:(cmd[2]?cmd[2]:(cmd2[2],cmd2[2]:=cmd2[3],cmd2[3]:=cmd2[4],cmd2[4]:=cmd2[5],cmd2[5]:=cmd2[6],cmd2[6]:=cmd2[7])))
+				%Gui%[cmd[1]]((Temp_?Temp_:""),(cmd2[2]?cmd2[2]:(cmd[1]="prepend"?1:0)),(cmd2[3]?cmd2[3]:""),(cmd2[4]?cmd2[4]:1),(cmd2[5]?cmd2[5]:" "),(cmd2[6]?cmd2[6]:" | "))
+			}else If(cmd[1]~="color|run|update|show")
+				%Gui%[cmd[1]]((cmd[2]?cmd[2]:""))
+			else If(cmd[1]~="clear|cls|close|destroy|exit")
+				%Gui%[cmd[1]]()
 			ListLines,On
 		return
 	}
@@ -161,33 +192,29 @@ class console
 			return
 		else If line
 			catchTemp:=this.debug("lines")
-		SetTimer,Console_Catch,20
-		catchConsole:=this.name,catchLine:=line,catchVar:=var,catchValue:=value
+		SetTimer,% ("Console_Catch",catchConsole:=this.name,catchLine:=line,catchVar:=var,catchValue:=value),20
 		return
 		Console_Catch:
 			ListLines,Off
-			If(catchTemp=""&&catchVar=catchValue)
+			If(catchTemp=""&&%catchVar%=catchValue)
 				catchCaught:=1
 			else
 			{	StringReplace,catchTemp,catchTemp,`n,`n,UseErrorLevel
 				Assign1:=ErrorLevel-50,Temp_2:=%catchConsole%.debug("lines")
 				ListLines,Off
 				Loop,parse,Temp_2,`n
-				{	If(A_Index<Assign1)
-						Continue
-					If(SubStr(A_LoopField,1,4)=(StrLen(catchLine)<2?00 catchLine:(StrLen(catchLine)<3?0 catchLine:catchLine)) ":")
-					{	catchCaught:=1
-						break
-					}else continue
-			}}If catchCaught
-			{	SetTimer,Console_Catch,Off
-				(catchTemp?%catchConsole%.append("Line " catchLine " executed!"):%catchConsole%.append("Var " catchVar " = " catchValue "."))
-		}ListLines,On
+				{	If(A_Index>=Assign1)
+					{	If(SubStr(A_LoopField,1,4)=(StrLen(catchLine)<2?00 catchLine:(StrLen(catchLine)<3?0 catchLine:catchLine)) ":")
+						{	catchCaught:=1
+							break
+			}}}}If catchCaught
+				SetTimer,% ("Console_Catch",(catchTemp?%catchConsole%.append("Line " catchLine " executed!"):%catchConsole%.append("Var " catchVar " = " catchValue "."))),Off
+		ListLines,On
 		return
 	}
 	clear()
 	{	ListLines,Off
-		ListLines,% ("On",Temp_:=this.edit,this.line:=0,%Temp_%.write(""),%Temp_%.close(""),%Temp_%.write(this.html))
+		Temp_:=this.edit,this.line:=0,%Temp_%.close(""),%Temp_%.write(this.html)
 	}
 	close()
 	{	ListLines,Off
@@ -211,8 +238,10 @@ class console
 		return (data,OnMessage(MsgNum,""),(AppendConsole?this.append(data:=objExec.StdOut.ReadAll()):""))
 	}
 	color(color:="white") ; these colors are the same as what is defined in the CSS in __new().
-	{	ListLines,Off
-		ListLines,% ("On",this.tc:=(color="yellow"?"c1":(color="orange"?"c2":(color="white"?"c3":(color="red"?"c4":(color="blue"?"c5":(color="lime"?"c6":(color="green"?"c7":(color="black"?"c8":"c3")))))))))
+	{	static yellow,orange,white,red,blue,lime,green,black,_,$,h,f
+		ListLines,Off
+		yellow:="c1",orange:="c2",white:="c3",red:="c4",blue:="c5",lime:="c6",green:="c7",black:="c8",_:="&nbsp;",$:="|`n|",h:="`n<span class='h1'>Color Table</span>`n.-----------------.",f:="'-----------------'"
+		ListLines,% ("On",(color="list"?this.append(h "`n|" _ "yellow" _ "|" _ "<span class='c1'>yellow</span>" _ $ _ "orange" _ "|" _ "<span class='c2'>orange</span>" _ $ _ "white" _ _ "|" _ "<span class='c3'>white</span>" _ _ "|" _ "<span class='s1'><-" _ "default</span>`n|" _ "red" _ _ _ _ "|" _ "<span class='c4'>red</span>" _ _ _ _ $ _ "blue" _ _ _ "|" _ "<span class='c5'>cyan</span>" _ _ _ $ _ "lime" _ _ _ "|" _ "<span class='c6'>lime</span>" _ _ _ $ _ "green" _ _ "|" _ "<span class='c7'>green</span>" _ _ $ _ "gray" _ _ _ "|" _  "<span class='c8'>gray</span>" _ _ _ $ _ "black" _ _ "|" _ "<span class='c9'>black</span>" _ _ "|`n" f):this.tc:=%color%))
 	}
 	debug(debugType)
 	{	static id,pSFW,pSW,bkpSFW,bkpSW
@@ -244,7 +273,7 @@ class console
 	}
 	log(text:="",scroll:=0,delim:="",justify:=1,pad:=" ",colsep:=" | ")
 	{	ListLines,Off
-		FormatTime,time,T0,% this.timeext
+		FormatTime,time,T0,% (this.timeext,(IsObject(text)?text:=st_PrintArr(text,,""):(delim!=""?text:=AL_Columnize(text,delim,justify,pad,colsep):"")))
 		Loop,parse,text,`n,% ("",Log:="<p><span class='num'>" ++this.line ".</span>" this.Check2[(this.line<10?5:(this.line<100?4:(this.line<1000?3:2)))] "<span class='c1'>" (time?"&nbsp;&nbsp;&nbsp;" time "</span>":"</span>"))
 			textO.="<p class='" this.tc "'><span class='num'>" ++this.line ".</span>" this.Check2[(this.line<10?5:(this.line<100?4:(this.line<1000?3:2)))] A_LoopField
 		Temp_:=this.edit,%Temp_%.write(log textO),%Temp_%.getElementById("bod").scrollIntoView(scroll)
@@ -252,10 +281,9 @@ class console
 	}
 	prepend(text:="",scroll:=1,delim:="",justify:=1,pad:=" ",colsep:=" | ")
 	{	ListLines,Off
-		(text=""?text:=st_PrintArr(text,,""):(delim!=""?text:=AL_Columnize(text,delim,justify,pad,colsep):"")),(text?"":text:="&nbsp;")
-		Loop,parse,text,`n,% ("",this.line:=0,Temp_:=this.edit,Assign1:=this.line)
-		{	Data:=%Temp_%.getElementById("bod").innerHTML,this.clear()
-			ListLines,Off
+		(IsObject(text)?text:=st_PrintArr(text,,""):(delim!=""?text:=AL_Columnize(text,delim,justify,pad,colsep):"")),Temp_:=this.edit,Data:=%Temp_%.getElementById("bod").innerHTML,this.clear()
+		Loop,parse,text,`n,% ("",this.line:=0,Assign1:=this.line)
+		{	ListLines,Off
 			textO.="<p class='" this.tc "'><span class='num'>" ++this.line ".</span>" this.Check2[(this.line<10?5:(this.line<100?4:(this.line<1000?3:2)))] A_LoopField
 		}Loop,parse,data,`n,% ("",Assign2:=this.line-Assign1)
 			Assign1:=RegExReplace(SubStr(A_LoopField,InStr(A_LoopField,".")+1),"(&nbsp;){" (this.line<10?5:(this.line<100?4:(this.line<1000?3:2))) "}"),this.line++,Assign3:=SubStr(A_LoopField,1,InStr(A_LoopField,".")-1),textO.=SubStr(Assign3,1,InStr(Assign3,">",0,0)) SubStr(Assign3,InStr(Assign3,">",0,0)+1)+Assign2 "." this.Check2[(this.line<10?5:(this.line<100?4:(this.line<1000?3:2)))] Assign1
@@ -277,9 +305,9 @@ class console
 		FileAppend,%Data%,%FileName%
 		ListLines,On
 	}
-	show()
+	show(GuiName:="")
 	{	ListLines,Off
-		Gui,% this.name ":Show"
+		Gui,% (GuiName?GuiName:this.name) ":Show"
 		ListLines,On
 	}
 	timeSinceLastCall(id:=1,reset:="")
