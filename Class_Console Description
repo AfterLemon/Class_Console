@@ -1,18 +1,12 @@
-Name: Console
-Version 1.7 (Thu March 06, 2014)
-Created: Tue February 11, 2014
-Authors: AfterLemon tidbit
-Credit:
+Name:			[Class] Console
+Version:		1.8 (Tue March 11, 2014)
+Created:		Tue February 11, 2014
+Authors:		AfterLemon tidbit
+GitHub:			https://github.com/AfterLemon/Class_Console
+AutoHotkey:		http://www.autohotkey.com/board/topic/101881-class-console-standardized-console-gui-with-methods/
+AHKScript:		http://ahkscript.org/boards/viewtopic.php?f=6&t=2116&p=14026
 
-Description:
-	A sort of debugging console for your script. Display variables, arrays, CSV 
-	and other delimited data, script info like Variables and Last Lines and more in 
-	a console-like Gui. You may also use the Command Bar to show info without needing to
-	call stuff from the program. You may also do math or modify variables content.
-
-Notes:
- * "debugType" is the type of information using AutoHotkey's Built-in logs for
-   KeyHistory, ListVars (Vars), ListLines (Lines), and ListHotkeys (Hotkeys).
- * "TimeFormat" should be 0, 1 or any "FormatTime" format. 0 = none. 1=A_Now (default)
-   otherwise format it according to the FormatTime docs.
- * YOu may use HTML and CSS (well, CSS mostly, not really html) to theme your console. Default is high-contrast light-on-dark. 
+Functions Available:
+Class_Console		to build the console object - use this in place of Console:=new console()
+Desc_Console		to view the description of the class
+Methods_Console		to view the documentation for the methods
