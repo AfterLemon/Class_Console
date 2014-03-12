@@ -1,5 +1,5 @@
 Class:
-    Class_Console(Name,x,y,w,h [,Timestamp,HTML,Font,Fontsize])
+    Class_Console(Name,x,y,w,h [GuiTitle,Timestamp,HTML,Font,Fontsize])
     This creates a new console object with the name of "Name".
 
 All the below stuff will use the console defined above.
