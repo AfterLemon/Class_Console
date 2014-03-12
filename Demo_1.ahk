@@ -3,9 +3,9 @@
 #SingleInstance,Force
 SetWorkingDir,%A_ScriptDir%  ; Ensures a consistent starting directory.
  
-a:=new console("a",100,100,200,435)
-b:=new console("b",313,100,400,200)
-c:=new console("c",313,335,400,200,,,9)
+Class_Console("a",100,100,200,435)
+Class_Console("b",313,100,400,200)
+Class_Console("c",313,335,400,200,,,,9)
 a.show()
 b.show()
 c.show()
@@ -34,7 +34,7 @@ b.show()
 Sleep,1000
 a:=""
 sleep,800
-a:=new console("a",100,100,200,435)
+Class_Console("a",100,100,200,435)
 a.show()
 a.log(c.Debug("KeyHistory"))
 Sleep,2000
