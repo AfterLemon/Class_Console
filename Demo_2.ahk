@@ -3,11 +3,11 @@
 #SingleInstance,Force
 SetWorkingDir,%A_ScriptDir%  ; Ensures a consistent starting directory.
  
-a:=new console("Variable list",100,100,400,600)
-a.log("A:This is working")
-a.show(1)
-a.log(a.debug("vars"))
-b:=new console("",511,100,400,600)
+Class_Console("VariableList",100,100,400,600,"Variable List")
+VariableList.log("Variable List:This is working")
+VariableList.show()
+VariableList.log(VariableList.debug("vars"))
+Class_Console("b",511,100,400,600,"Example")
 b.show()
 b.log(a.pull() "`n`nB:This is also")
 Sleep,3000
