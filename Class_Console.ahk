@@ -15,9 +15,9 @@ Methods_Console	to view the documentation for the methods
 
 If(A_ScriptName="Class_Console.ahk")
 {	Class_Console("Example",5,5,800,500),Example.Show()
-	,Example.append("`n" Desc_Console(),1),Example.append("`n" Methods_Console(),1),Example.color("list")
+	,Example.append("`n" Desc_Console(),1),Example.append("`n" Methods_Console(),1),Example.color("list"),Example.cmdwait("ipconfig")
 	,Example.append("`n<span class='s1'>[Note: Command Bar can ONLY be used if the object is the same name as the Console.]</span>",1)
-	WinWaitClose,Console "DebugID Example"
+	WinWaitClose,Console DebugID "Example"
 	ExitApp
 }
 
@@ -26,27 +26,28 @@ Class_Console(Name,x,y,w,h,GuiTitle:="",Timestamp:=1,HTML:="",Font:="Courier New
 }
 Desc_Console()
 {	static _,__,$,@
-	ListLines,Off
-			_:="<span class='c1'>",__:="<span class='c7'>",$:="</span>",@:="`n&nbsp;&nbsp;&nbsp;&nbsp;"
-	return	"<span class='h2'>Description:" $ @ "A sort of debugging console for your script. Display variables, arrays, CSV and other delimited data, script info like Variables and Last Lines and more in a console-like Gui. You may also use the Command Bar to show info without needing to call stuff from the program. You may also do math or modify variables content.`n`n<span class='h1'>Notes:" $ @ "* """ _ "debugType" $ """ is the type of information using AutoHotkey's Built-in logs" @ "KeyHistory, ListVars (Vars),"
-			.	" ListLines (Lines), and ListHotkeys (Hotkeys)`n" @ "* """ _ "Timestamp" $ """ should be 0, 1 or any """ __ "FormatTime" $ """ format." @ "0 = none. 1 = A_Now (default) otherwise format it according to the <a href=""http://www.autohotkey.com/docs/commands/FormatTime.htm"">FormatTime docs</a>.`n" @ "* You may use <span class='c1'>CSS" $ " and some <span class='c4'>HTML" $ " to theme your console." @ "Default is high-contrast light-on-dark. <span class='c9'>Backgrounds can also be modified." $
+	ListLines,% ("Off",_:="<span class='c1'>",__:="<span class='c7'>",$:="</span>",@:="`n&nbsp;&nbsp;&nbsp;&nbsp;")
+	ListLines,% ("On","<span class='h2'>Description:" $ @ "A sort of debugging console for your script. Display variables, arrays, CSV and other delimited data, script info like Variables and Last Lines and more in a console-like Gui. You may also use the Command Bar to show info without needing to call stuff from the program. You may also do math or modify variables content.`n`n<span class='h1'>Notes:" $ @ "* """ _ "debugType" $ """ is the type of information using AutoHotkey's Built-in logs" @ "KeyHistory, ListVars (Vars),"
+			.	" ListLines (Lines), and ListHotkeys (Hotkeys)`n" @ "* """ _ "Timestamp" $ """ should be 0, 1 or any """ __ "FormatTime" $ """ format." @ "0 = none. 1 = A_Now (default) otherwise format it according to the <a href=""http://www.autohotkey.com/docs/commands/FormatTime.htm"">FormatTime docs</a>.`n" @ "* You may use <span class='c1'>CSS" $ " and some <span class='c4'>HTML" $ " to theme your console." @ "Default is high-contrast light-on-dark. <span class='c9'>Backgrounds can also be modified." $)
+	return T
 }
 Methods_Console()
 {	static _,__,___,____,$,@
-	ListLines,Off
-			_:="`n`n<span class='c4'>",__:="<span class='c5'>",___:="<span class='c1'>",____:="<span class='c2'>",$:="</span>",@:="`n&nbsp;&nbsp;&nbsp;&nbsp;"
-	return	"<span class='h1'>Class:" $ @ __ "Class_Console" $ "(" ___ "Name,x,y,w,h" $ ____ " [,GuiTitle,Timestamp,HTML,Font,Fontsize]" $ ")`n" @ "This creates a new console object with the name of """ ___ "Name" $ """.`n`nAll the below stuff will use the console defined above.`nYou may use any name you like in your code.`n`n<span class='h1'>Methods:" $ _ "aaa" $ "." __ "append" $ "(" ____ "[text,delim,justify,pad,colsep]" $ ")" @ "Add text to the end of the console without a timestamp." _ "aaa" $ "." __ "catch" $ "(" ____
-			.	"[line,var,value]" $ ")" @ "Detect when a variable is a certain value or a certain line of code is executed." _ "aaa" $ "." __ "clear" $ "()" @ "Remove all the text on the console." _ "aaa" $ "." __ "close" $ "()" @ "Close the console but don't destroy it. Basically you Hide it." _ "aaa" $ "." __ "color" $ "(" ____ "[c]" $ ")" @ "Sets text color for following lines. Default is white." @ "Specify ""list"" to see the color table." _ "aaa" $ "." __ "cmd" $ "(" ___ "command" $ ____ " [,breakOn,AppendConsole]"
-			.	$ ")" @ "Run (and return) a command-prompt command and get the input line-by-line." _ "aaa" $ "." __ "cmdWait" $ "(" ___ "command" $ ____ " [,AppendConsole]" $ ")" @ "Run (and return) a command-prompt command and wait for it to fully finish." _ "aaa" $ "." __ "destroy" $ "()" @ "Destroy the console, it can not be shown until recreated." _ "aaa" $ "." __ "debug" $ "(" ___ "debugType" $ ")" @ "Show AHK's debug info: KeyHistory, ListVars (Vars), ListLines (Lines), and ListHotkeys (Hotkeys)." _ "aaa" $ "." __ "eval" $
-			.	"(" ___ "In" $ ____ " [,Append]" $ ")" @ "Evaluate expression with numbers,+ # - / and *." _ "aaa" $ "." __ "log" $ "(" ____ "[text,delim,justify,pad,colsep]" $ ")" @ "Same as append, but with a timestamp." _ "aaa" $ "." __ "prepend" $ "(" ____ "[text,delim,justify,pad,colsep]" $ ")" @ "Same as append, but adds the text to the TOP (line 1) of the console." _ "aaa" $ "." __ "pull" $ "()" @ "Get the current console text." _ "aaa" $ "." __ "save" $ "(" ____ "[FileName,Overwrite (flag)]" $ ")" @ "Save the console to a file." _
-			.	"aaa" $ "." __ "show" $ "()" @ "Show a closed or recently created console." _ "aaa" $ "." __ "timeSinceLastCall" $ "(" ____ "[id,reset]" $ ")" @ "Get the amount of time (in MS) since the last time this function was called." _ "aaa" $ "." __ "update" $ "(" ___ "debugType" $ ")" @ "This is similar to doing a CLEAR and then LOG(DEBUG())."
+	ListLines,% ("Off",_:="`n`n<span class='c4'>",__:="<span class='c5'>",___:="<span class='c1'>",____:="<span class='c2'>",$:="</span>",@:="`n&nbsp;&nbsp;&nbsp;&nbsp;")
+	ListLines,% ("On",T:="<span class='h1'>Class:" $ @ __ "Class_Console" $ "(" ___ "Name,x,y,w,h" $ ____ " [,GuiTitle,Timestamp,HTML,Font,Fontsize]" $ ")`n" @ "This creates a new console object with the name of """ ___ "Name" $ """.`n`nAll the below stuff will use the console defined above.`nYou may use any name you like in your code.`n`n<span class='h1'>Methods:" $ _ "aaa" $ "." __ "append" $ "(" ____ "[text,delim,justify,pad,colsep]" $ ")" @ "Add text to the end of the console without a timestamp." _ "aaa" $ "." __
+			.	"catch" $ "(" ____ "[line,var,value]" $ ")" @ "Detect when a variable is a certain value or a certain line of code is executed." _ "aaa" $ "." __ "clear" $ "()" @ "Remove all the text on the console." _ "aaa" $ "." __ "close" $ "()" @ "Close the console but don't destroy it. Basically you Hide it." _ "aaa" $ "." __ "color" $ "(" ____ "[c]" $ ")" @ "Sets text color for following lines. Default is white." @ "Specify ""list"" to see the color table." _ "aaa" $ "." __ "cmd" $ "(" ___ "command" $ ____ " [,breakOn,AppendConsole]"
+			.	$ ")" @ "Run (and return) a command-prompt command and get the input line-by-line." _ "aaa" $ "." __ "cmdWait" $ "(" ___ "command" $ ____ " [,AppendConsole]" $ ")" @ "Run (and return) a command-prompt command and wait for it to fully finish." _ "aaa" $ "." __ "destroy" $ "()" @ "Destroy the console, it can not be shown until recreated." _ "aaa" $ "." __ "debug" $ "(" ___ "debugType" $ ")" @ "Show AHK's debug info: KeyHistory, ListVars (Vars), ListLines (Lines), and ListHotkeys (Hotkeys)." _ "aaa" $ "." __
+			.	"eval" $ "(" ___ "In" $ ____ " [,Append]" $ ")" @ "Evaluate expression with numbers,+ # - / and *." _ "aaa" $ "." __ "log" $ "(" ____ "[text,delim,justify,pad,colsep]" $ ")" @ "Same as append, but with a timestamp." _ "aaa" $ "." __ "prepend" $ "(" ____ "[text,delim,justify,pad,colsep]" $ ")" @ "Same as append, but adds the text to the TOP (line 1) of the console." _ "aaa" $ "." __ "pull" $ "()" @ "Get the current console text." _ "aaa" $ "." __ "save" $ "(" ____ "[FileName,Overwrite (flag)]" $ ")" @ "Save the "
+			.	"console to a file." _ "aaa" $ "." __ "show" $ "()" @ "Show a closed or recently created console." _ "aaa" $ "." __ "timeSinceLastCall" $ "(" ____ "[id,reset]" $ ")" @ "Get the amount of time (in MS) since the last time this function was called." _ "aaa" $ "." __ "update" $ "(" ___ "debugType" $ ")" @ "This is similar to doing a CLEAR and then LOG(DEBUG()).")
+	return T
 }
 class console
 {	__new(ObjVar,x,y,w,h,GuiTitle:="",Timestamp:=1,HTML:="",Font:="Courier New",FontSize:=10)
 	{	global
 		static _,__,$,@,@@
 		local Name2,MatchList,Check,Temp_,Temp_2,Gui,Gui_B,cmd,cmd2,Assign1,Assign2,Assign3,debugprev,DHW,textO,Check2,tc,Console_Help1,Console_Help2,Console_Help3
-		ListLines,% ("Off",this.Time:=A_Now,this.WordList:=this.WordList1 this.WordList2,((Timestamp!=0&&Timestamp!=1)?this.timeext:=Timestamp:(Timestamp=1?this.timeext:="":(Timestamp=0?this.timeext:=0:""))),Name2:=(GuiTitle?GuiTitle:"DebugID " ObjVar),this.Name:=ObjVar,this.edit:=ObjVar this.time,this.tc:="c3",%ObjVar%:=this,_:="<span class='c1'>",__:="<span class='",$:="</span>",@:="&nbsp;",@@:=@ @ @ @)
+		ListLines,% ("Off",this.Time:=A_Now,this.WordList:=this.WordList1 this.WordList2,((Timestamp!=0&&Timestamp!=1)?this.timeext:=Timestamp:(Timestamp=1?this.timeext:="":(Timestamp=0?this.timeext:=0:""))),Name2:=(GuiTitle?GuiTitle:"DebugID """ ObjVar """"),this.Name:=ObjVar,this.edit:=ObjVar this.time,this.tc:="c3",%ObjVar%:=this,_:="<span class='c1'>",__:="<span class='",$:="</span>",@:="&nbsp;",@@:=@ @ @ @)
+		SetFormat,FloatFast,0.18
 		If !html
 			html=
 			(ltrim
@@ -72,7 +73,7 @@ class console
 		Gui,% ObjVar ":add",edit,% "x-1 y" h-23 " w" w+2 "h22 -0x200 vcc" ObjVar
 		Gui,% ObjVar ":add",button,default Hidden gSubCC,OK
 		Gui,% (ObjVar ":-MinimizeBox +Border",this.Check2:=["",@ @,@ @ @,@@,@@ @])
-		Gui,% ObjVar ":show",% "Hide x" x " y" y " w" (this.w:=w) " h" h,% ("Console """ Name2 """",this.fontsize:=FontSize,this.line:=0,Temp_:=this.edit)
+		Gui,% ObjVar ":show",% "Hide x" x " y" y " w" (this.w:=w) " h" h,% ("Console " Name2,this.fontsize:=FontSize,this.line:=0,Temp_:=this.edit)
 		Console_Help1:={"!ExitApp": __ "c6'>Desc:" $ @ @ @ " Exits entire script.`n" __ "c5'>Syntax:" $ @ " ExitApp"
 			,"*Catch":__ "c6'>Desc:" $ @ @ @ " Detect when a variable is a certain value,`n" __ "c6'>OR" $ @@ @ @ " Detect when a line in ListLines exists.`n" __ "c5'>Syntax:" $ @ " catch var varName Value command`n" __ "c5'>Syntax:" $ @ " catch var line DebugLineNum Command`n" __ "c1'>Example:" $ " catch var d 4 prepend %d%`n" __ "c1'>Example:" $ " catch line 11 log line 11 was accessed!"
 			,"*Settimer":__ "c6'>Desc:" $ @ @ @ " Run a [command] every N milliseconds (1000=1 second, 5000=5 seconds, etc).`n" __ "c5'>Syntax:" $ @ " SetTimer N command`n" __ "c1'>Example:" $ " SetTimer 1000 var Banana"
@@ -100,7 +101,8 @@ class console
 		For Assign1,Assign2 in Console_Help2
 			this.Console_Help[Assign1]:=Assign2
 		DetectHiddenWindows,% ("On",DHW:=A_DetectHiddenWindows)
-		DetectHiddenWindows,% (DHW,this.HWND:=WinExist("Console """ Name2 """"),%Temp_%.write(this.html:=html),this.append("Type 'help' for a list of commands (no quotes)"))
+		DetectHiddenWindows,% (DHW,this.HWND:=WinExist("Console " Name2),%Temp_%.write(this.html:=html),this.append("Type 'help' for a list of commands (no quotes)"))
+		ListLines,On
 		return 1
 		TimerSubCC:
 		SubCC:
@@ -112,15 +114,13 @@ class console
 			For Temp_ in ((InStr(cc%Gui%," ")?cmd:=StrSplit(cc%Gui%,[" ","`t"]):(cmd:=[],cmd[1]:=(InStr(cc%Gui%,",")?SubStr(cc%Gui%,1,InStr(cc%Gui%,",")-1):cc%Gui%))),cmd2:=StrSplit((InStr(cc%Gui%," ")?SubStr(cc%Gui%,InStr(cc%Gui%," ")+1):cc%Gui%),","))
 				(cmd[Temp_]=""?cmd.remove(Temp_):"")
 			If(RegExReplace(cc%Gui%,".=")!=cc%Gui%,%Gui%.cls:=%Gui%.clear,%Gui%.exit:=%Gui%.destroy)
-			{	SetFormat,FloatFast,0.18
-				Transform,Assign3,deref,% SubStr(cc%Gui%,InStr(cc%Gui%,"=")+1)
+			{	Transform,Assign3,deref,% SubStr(cc%Gui%,InStr(cc%Gui%,"=")+1)
 				Assign1:=SubStr(cc%Gui%,1,InStr(cc%Gui%,"=")-2),Assign2:=SubStr(cc%Gui%,InStr(cc%Gui%,"=")-1,2),%Assign1%:=%Gui%.eval((Assign2=":="?Assign3:(Assign2="+="?%Assign1%+Assign3:(Assign2="-="?%Assign1%-Assign3:(Assign2="*="?%Assign1%*Assign3:(Assign2="/="?%Assign1%/Assign3:(Assign2="//="?%Assign1%//Assign3:(Assign2=".="?%Assign1% Assign3:(Assign2="|="?%Assign1%|Assign3:(Assign2="&="?%Assign1%&Assign3:(Assign2="^="?%Assign1%^Assign3:"")))))))))))
 			}else If(cmd[1]="settimer")
 			{	Transform,Temp_,deref,% cmd[2]
 				Loop,% (cmd.MaxIndex()-2,cc%Gui%_B:="",Gui_B:=Gui)
 					cc%Gui%_B.=cmd[A_Index+2] " "
-				cc%Gui%_B:=RTrim(cc%Gui%_B," ")
-				SetTimer,TimerSubCC,%Temp_%
+				SetTimer,% ("TimerSubCC",cc%Gui%_B:=RTrim(cc%Gui%_B," ")),%Temp_%
 			}else If(cmd[1]="var")
 				Temp_:=cmd[2],%Gui%[(cmd[3]=1?"log":(cmd[3]="-1"?"prepend":"append"))](%Temp_%)
 			else If(cmd[1]="about")
@@ -130,6 +130,8 @@ class console
 				(cmd[2]="line"?%Gui%.catch(cmd[3]):(cmd[2]="var"?%Gui%.catch("",cmd[3],cmd[4]):""))
 			else If(cmd[1]="cmd")
 				%Gui%.cmd((cmd2[1]?cmd2[1]:""),(cmd2[2]?cmd2[2]:""),(cmd2[3]?cmd2[3]:1))
+			else If(cmd[1]="cmdwait")
+				%Gui%.cmdwait((cmd2[1]?cmd2[1]:""),(cmd2[2]?cmd2[2]:1))
 			else If(cmd[1]="debug")
 				%Gui%.log(%Gui%.debug(cmd[2]))
 			else If(cmd[1]="desc")
@@ -180,9 +182,9 @@ class console
 	}
 	append(text:="",scroll:=0,delim:="",justify:=1,pad:=" ",colsep:=" | ")
 	{	ListLines,Off
-		(IsObject(text)?text:=st_PrintArr(text,,""):(delim!=""?text:=AL_Columnize(text,delim,justify,pad,colsep):"")),(text?"":text:="&nbsp;")
+		(IsObject(text)?text:=RegExReplace(st_PrintArr(text,,"")," ","&nbsp;"):(delim!=""?text:=RegExReplace(AL_Columnize(text,delim,justify,pad,colsep)," ","&nbsp;"):"")),(text?"":text:="&nbsp;")
 		Loop,parse,text,`n
-			textO.="<p class='" this.tc "'><span class='num'>" ++this.line ".</span>" this.Check2[(this.line<10?5:(this.line<100?4:(this.line<1000?3:2)))] A_LoopField
+			textO.=(A_Index=1?"":"</p>") "<p class='" this.tc "'><span class='num'>" ++this.line ".</span>" this.Check2[(this.line<10?5:(this.line<100?4:(this.line<1000?3:2)))] A_LoopField
 		ListLines,% ("On",Temp_:=this.edit,%Temp_%.write(((text~="^\s+$"||text="")?textO:Trim(textO,"`r`n `t")) "</p>"),%Temp_%.getElementById("bod").scrollIntoView(scroll))
 	}
 	catch(line:="",var:="",value:="")
@@ -200,8 +202,7 @@ class console
 				catchCaught:=1
 			else
 			{	StringReplace,catchTemp,catchTemp,`n,`n,UseErrorLevel
-				Assign1:=ErrorLevel-50,Temp_2:=%catchConsole%.debug("lines")
-				ListLines,Off
+				ListLines,% ("Off",Assign1:=ErrorLevel-50,Temp_2:=%catchConsole%.debug("lines"))
 				Loop,parse,Temp_2,`n
 				{	If(A_Index>=Assign1)
 					{	If(SubStr(A_LoopField,1,4)=(StrLen(catchLine)<2?00 catchLine:(StrLen(catchLine)<3?0 catchLine:catchLine)) ":")
@@ -213,8 +214,7 @@ class console
 		return
 	}
 	clear()
-	{	ListLines,Off
-		Temp_:=this.edit,this.line:=0,%Temp_%.close(""),%Temp_%.write(this.html)
+	{	ListLines,% ("Off",Temp_:=this.edit,this.line:=0,%Temp_%.close(""),%Temp_%.write(this.html))
 	}
 	close()
 	{	ListLines,Off
@@ -222,35 +222,32 @@ class console
 		ListLines,On
 	}
 	cmd(cmd:="",breakOn:="",AppendConsole:=1)
-	{	ListLines,Off
-		DllCall("RegisterShellHookWindow",UInt,A_ScriptHwnd),MsgNum:=DllCall("RegisterWindowMessage",Str,"SHELLHOOK"),OnMessage(MsgNum,"ShellMessage"),(cmd!=""?(this.objShell:=ComObjCreate("WScript.Shell"),this.cmd:=cmd):cmd:=this.cmd),objExec:=this.objShell.Exec(cmd)
-		While(!objExec.StdOut.AtEndOfStream)
-			If((InStr(data,breakOn)&&breakOn!=""),(AppendConsole?this.append(data:=objExec.StdOut.ReadLine()):""),all.=data "`n")
+	{	ListLines,% ("Off",DllCall("RegisterShellHookWindow",UInt,A_ScriptHwnd),MsgNum:=DllCall("RegisterWindowMessage",Str,"SHELLHOOK"),OnMessage(MsgNum,"ShellMessage"),(cmd!=""?(this.objShell:=ComObjCreate("WScript.Shell"),this.cmd:=cmd):cmd:=this.cmd),objExec:=this.objShell.Exec(cmd),Temp_:=objExec.StdOut.AtEndOfStream)
+		While !Temp_
+		{	If((InStr(data,breakOn)&&breakOn!=""),(AppendConsole?this.append(data:=objExec.StdOut.ReadLine()):""),all.=data "`n")
 				return (data,OnMessage(MsgNum,""))
-		ListLines,On
-		return (trim(all,"`r`n"),OnMessage(MsgNum,""))
+			ListLines,% ("Off",Temp_:=objExec.StdOut.AtEndOfStream)
+		}return (trim(all,"`r`n"),OnMessage(MsgNum,""))
 	}
 	cmdWait(cmd:="",AppendConsole:=1)
-	{	ListLines,Off
-		DllCall("RegisterShellHookWindow",UInt,A_ScriptHwnd),MsgNum:=DllCall("RegisterWindowMessage",Str,"SHELLHOOK"),OnMessage(MsgNum,"ShellMessage"),(cmd!=""?(this.objShell:=ComObjCreate("WScript.Shell"),this.cmd:=cmd):cmd:=this.cmd),objExec:=this.objShell.Exec(cmd)
-		While(!objExec.Status,DllCall("Sleep",uint,50))
-		{}ListLines,On
+	{	ListLines,% ("Off",DllCall("RegisterShellHookWindow",UInt,A_ScriptHwnd),MsgNum:=DllCall("RegisterWindowMessage",Str,"SHELLHOOK"),OnMessage(MsgNum,"ShellMessage"),(cmd!=""?(this.objShell:=ComObjCreate("WScript.Shell"),this.cmd:=cmd):cmd:=this.cmd),objExec:=this.objShell.Exec(cmd),Temp_:=objExec.Status)
+		While !Temp_
+			ListLines,% ("Off",Temp_:=objExec.Status,DllCall("Sleep",uint,50))
 		return (data,OnMessage(MsgNum,""),(AppendConsole?this.append(data:=objExec.StdOut.ReadAll()):""))
 	}
 	color(color:="white") ; these colors are the same as what is defined in the CSS in __new().
 	{	static yellow,orange,white,red,blue,lime,green,black,_,$,h,f
-		ListLines,Off
-		yellow:="c1",orange:="c2",white:="c3",red:="c4",blue:="c5",lime:="c6",green:="c7",black:="c8",_:="&nbsp;",$:="|`n|",h:="`n<span class='h1'>Color Table</span>`n.-----------------.",f:="'-----------------'"
+		ListLines,% ("Off",yellow:="c1",orange:="c2",white:="c3",red:="c4",blue:="c5",lime:="c6",green:="c7",black:="c8",_:="&nbsp;",$:="|`n|",h:="`n<span class='h1'>Color Table</span>`n.-----------------.",f:="'-----------------'")
 		ListLines,% ("On",(color="list"?this.append(h "`n|" _ "yellow" _ "|" _ "<span class='c1'>yellow</span>" _ $ _ "orange" _ "|" _ "<span class='c2'>orange</span>" _ $ _ "white" _ _ "|" _ "<span class='c3'>white</span>" _ _ "|" _ "<span class='s1'><-" _ "default</span>`n|" _ "red" _ _ _ _ "|" _ "<span class='c4'>red</span>" _ _ _ _ $ _ "blue" _ _ _ "|" _ "<span class='c5'>cyan</span>" _ _ _ $ _ "lime" _ _ _ "|" _ "<span class='c6'>lime</span>" _ _ _ $ _ "green" _ _ "|" _ "<span class='c7'>green</span>" _ _ $ _ "gray" _ _ _ "|" _  "<span class='c8'>gray</span>" _ _ _ $ _ "black" _ _ "|" _ "<span class='c9'>black</span>" _ _ "|`n" f):this.tc:=%color%))
 	}
-	debug(debugType)
+	debug(debugType) ; Credit @ Lexikos -> http://www.autohotkey.com/board/topic/20925-listvars/#entry156570
 	{	static id,pSFW,pSW,bkpSFW,bkpSW
 		ListLines,Off
 		If !id
 		{	DetectHiddenWindows,% ("On",d:=A_DetectHiddenWindows)
 			Process,Exist
 			ControlGet,id,Hwnd,,Edit1,ahk_class AutoHotkey ahk_pid %ErrorLevel%
-			DetectHiddenWindows,% (d,astr:=(A_IsUnicode?astr:str),ptr=(A_PtrSize=8?"ptr":uint),hmod=DllCall("GetModuleHandle",str,"user32.dll"),pSFW=DllCall("GetProcAddress",ptr,hmod,astr,"SetForegroundWindow"),pSW=DllCall("GetProcAddress",ptr,hmod,astr,"ShowWindow"),DllCall("VirtualProtect",ptr,pSFW,ptr,8,uint,0x40,"uint*",0),DllCall("VirtualProtect",ptr,pSW,ptr,8,uint,0x40,"uint*",0),bkpSFW=NumGet(pSFW+0,0,"int64"),bkpSW=NumGet(pSW+0,0,"int64"))
+			DetectHiddenWindows,% (d,astr:=(A_IsUnicode?"astr":"str"),ptr=(A_PtrSize=8?"ptr":"uint"),hmod=DllCall("GetModuleHandle",str,"user32.dll"),pSFW=DllCall("GetProcAddress",ptr,hmod,astr,"SetForegroundWindow"),pSW=DllCall("GetProcAddress",ptr,hmod,astr,"ShowWindow"),DllCall("VirtualProtect",ptr,pSFW,ptr,8,uint,0x40,"uint*",0),DllCall("VirtualProtect",ptr,pSW,ptr,8,uint,0x40,"uint*",0),bkpSFW=NumGet(pSFW+0,0,"int64"),bkpSW=NumGet(pSW+0,0,"int64"))
 		}(A_PtrSize=8?(NumPut(0x0000C300000001B8,pSFW+0,0,"int64"),NumPut(0x0000C300000001B8,pSW+0,0,"int64")):(NumPut(0x0004C200000001B8,pSFW+0,0,"int64"),NumPut(0x0008C200000001B8,pSW+0,0,"int64")))
 		IfEqual,debugType,Vars,ListVars
 		else IfEqual,debugType,Lines,ListLines
@@ -267,8 +264,7 @@ class console
 	}
 	eval(In,Append:=0)
 	{	ListLines,Off
-		Out:=(RegExMatch(In:=RegExReplace(In,"-","#"),"(.*)\(([^\(\)]+)\)(.*)",y)?this.eval(y1 Eval#(y2) y3):Eval#(In))
-		ListLines,On
+		ListLines,% ("On",Out:=(RegExMatch(In:=RegExReplace(In,"-","#"),"(.*)\(([^\(\)]+)\)(.*)",y)?this.eval(y1 Eval#(y2) y3):Eval#(In)))
 		return (Append?this.append(Out):Out)
 	}
 	log(text:="",scroll:=0,delim:="",justify:=1,pad:=" ",colsep:=" | ")
@@ -339,10 +335,11 @@ AL_Columnize(Data,delim="csv",justify=1,pad=" ",colsep=" | ") ;Credit @ tidbit,c
 				(StrLen(Arr[a_index,col])>width[col]?width[col]:=StrLen(Arr[a_index,col]):""),PadS.=pad pad
 			diff:=abs(len-width[col]),out.=((len<width[col],(isObject(colMode)?justify:=colMode[col]:""))?(justify=3?SubStr(PadS,1,floor(diff/2)) stuff SubStr(PadS,1,ceil(diff/2)):(justify=2?SubStr(PadS,1,diff) stuff:stuff SubStr(PadS,1,diff))):stuff) (col!=maxc?colsep:"")
 		}out.="`n"
-	}return SubStr(out,1,-2)
+	}return SubStr(out,1,-1)
 }
 ShellMessage(wParam,lParam)	; this is used for hiding the cmd window in the console.cmd() method.
-{	If(wParam=1)
+{	ListLines,Off
+	If(wParam=1)
 	{	WinGetClass,wclass,ahk_id %lParam%
 		If(wclass="ConsoleWindowClass")
 			WinHide,ahk_id %lParam%
