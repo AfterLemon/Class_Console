@@ -16,7 +16,6 @@ Methods_Console	to view the documentation for the methods
 If(A_ScriptName="Class_Console.ahk")
 {	Class_Console("Example",5,5,800,500),Example.Show()
 	,Example.append("`n" Desc_Console(),1),Example.append("`n" Methods_Console(),1),Example.color("list"),Example.cmdwait("ipconfig")
-	,Example.append("`n<span class='s1'>[Note: Command Bar can ONLY be used if the object is the same name as the Console.]</span>",1)
 	WinWaitClose,Console DebugID "Example"
 	ExitApp
 }
@@ -27,7 +26,7 @@ Class_Console(Name,x,y,w,h,GuiTitle:="",Timestamp:=1,HTML:="",Font:="Courier New
 Desc_Console()
 {	static _,__,$,@
 	ListLines,% ("Off",_:="<span class='c1'>",__:="<span class='c7'>",$:="</span>",@:="`n&nbsp;&nbsp;&nbsp;&nbsp;")
-	ListLines,% ("On","<span class='h2'>Description:" $ @ "A sort of debugging console for your script. Display variables, arrays, CSV and other delimited data, script info like Variables and Last Lines and more in a console-like Gui. You may also use the Command Bar to show info without needing to call stuff from the program. You may also do math or modify variables content.`n`n<span class='h1'>Notes:" $ @ "* """ _ "debugType" $ """ is the type of information using AutoHotkey's Built-in logs" @ "KeyHistory, ListVars (Vars),"
+	ListLines,% ("On",T:="<span class='h2'>Description:" $ @ "A sort of debugging console for your script. Display variables, arrays, CSV and other delimited data, script info like Variables and Last Lines and more in a console-like Gui. You may also use the Command Bar to show info without needing to call stuff from the program. You may also do math or modify variables content.`n`n<span class='h1'>Notes:" $ @ "* """ _ "debugType" $ """ is the type of information using AutoHotkey's Built-in logs" @ "KeyHistory, ListVars (Vars),"
 			.	" ListLines (Lines), and ListHotkeys (Hotkeys)`n" @ "* """ _ "Timestamp" $ """ should be 0, 1 or any """ __ "FormatTime" $ """ format." @ "0 = none. 1 = A_Now (default) otherwise format it according to the <a href=""http://www.autohotkey.com/docs/commands/FormatTime.htm"">FormatTime docs</a>.`n" @ "* You may use <span class='c1'>CSS" $ " and some <span class='c4'>HTML" $ " to theme your console." @ "Default is high-contrast light-on-dark. <span class='c9'>Backgrounds can also be modified." $)
 	return T
 }
@@ -101,7 +100,7 @@ class console
 		For Assign1,Assign2 in Console_Help2
 			this.Console_Help[Assign1]:=Assign2
 		DetectHiddenWindows,% ("On",DHW:=A_DetectHiddenWindows)
-		DetectHiddenWindows,% (DHW,this.HWND:=WinExist("Console " Name2),%Temp_%.write(this.html:=html),this.append("Type 'help' for a list of commands (no quotes)"))
+		DetectHiddenWindows,% (DHW,this.HWND:=WinExist("Console " Name2),%Temp_%.write(this.html:=html),this.append(__ "s1'>Type 'help' for a list of commands (no quotes)" $))
 		ListLines,On
 		return 1
 		TimerSubCC:
