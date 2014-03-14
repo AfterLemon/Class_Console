@@ -22,7 +22,7 @@ or use #include (see [http://ahkscript.org/docs/commands/_Include.htm](http://ah
 This creates a new console object with the name of "Name":
 
    ```autohotkey
-Class_Console(Name,x,y,w,h [,GuiTitle,Timestamp,HTML,Font,Fontsize])
+Class_Console("Name",x,y,w,h [,GuiTitle,Timestamp,HTML,Font,Fontsize])
    ```
    
 The following methods are available:
