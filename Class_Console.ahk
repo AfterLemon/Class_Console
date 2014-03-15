@@ -45,7 +45,7 @@ class console
 	{	global
 		static _,__,$,@,@@
 		local Name2,MatchList,Check,Temp_,Temp_2,Gui,Gui_B,cmd,cmd2,Assign1,Assign2,Assign3,debugprev,DHW,textO,Check2,tc,Console_Help1,Console_Help2,Console_Help3
-		ListLines,% ("Off",this.Time:=A_Now,this.WordList:=this.WordList1 this.WordList2,((Timestamp!=0&&Timestamp!=1)?this.timeext:=Timestamp:(Timestamp=1?this.timeext:="":(Timestamp=0?this.timeext:=0:""))),Name2:=(GuiTitle?GuiTitle:"DebugID """ ObjVar """"),this.Name:=ObjVar,this.edit:=ObjVar this.time,this.tc:="c3",%ObjVar%:=this,_:="<span class='c1'>",__:="<span class='",$:="</span>",@:="&nbsp;",@@:=@ @ @ @)
+		ListLines,% ("Off",this.Time:=A_Now,this.WordList:=this.WordList1 this.WordList2,((Timestamp!=0&&Timestamp!=1)?this.timeext:=Timestamp:(Timestamp=1?this.timeext:="":(Timestamp=0?this.timeext:=0:""))),Name2:=(GuiTitle?GuiTitle:"DebugID """ ObjVar """"),this.Name:=ObjVar,this.edit:=ObjVar this.time,this.tc:="c3",this.history:=[],%ObjVar%:=this,_:="<span class='c1'>",__:="<span class='",$:="</span>",@:="&nbsp;",@@:=@ @ @ @)
 		SetFormat,FloatFast,0.18
 		If !html
 			html=
@@ -276,12 +276,11 @@ class console
 	}
 	prepend(text:="",scroll:=1,delim:="",justify:=1,pad:=" ",colsep:=" | ")
 	{	ListLines,Off
-		(IsObject(text)?text:=st_PrintArr(text,,""):(delim!=""?text:=AL_Columnize(text,delim,justify,pad,colsep):"")),Temp_:=this.edit,Data:=%Temp_%.getElementById("bod").innerHTML,this.clear()
-		Loop,parse,text,`n,% ("",this.line:=0,Assign1:=this.line)
-		{	ListLines,Off
-			textO.="<p class='" this.tc "'><span class='num'>" ++this.line ".</span>" this.Check2[(this.line<10?5:(this.line<100?4:(this.line<1000?3:2)))] A_LoopField
-		}Loop,parse,data,`n,% ("",Assign2:=this.line-Assign1)
-			Assign1:=RegExReplace(SubStr(A_LoopField,InStr(A_LoopField,".")+1),"(&nbsp;){" (this.line<10?5:(this.line<100?4:(this.line<1000?3:2))) "}"),this.line++,Assign3:=SubStr(A_LoopField,1,InStr(A_LoopField,".")-1),textO.=SubStr(Assign3,1,InStr(Assign3,">",0,0)) SubStr(Assign3,InStr(Assign3,">",0,0)+1)+Assign2 "." this.Check2[(this.line<10?5:(this.line<100?4:(this.line<1000?3:2)))] Assign1
+		ListLines,% ("Off",(IsObject(text)?text:=st_PrintArr(text,,""):(delim!=""?text:=AL_Columnize(text,delim,justify,pad,colsep):"")),Temp_:=this.edit,data:=%Temp_%.getElementById("bod").innerHTML,this.clear())
+		Loop,parse,text,`n
+		{	textO.="<p class='" this.tc "'><span class='num'>" ++this.line ".</span>" this.Check2[(this.line<10?5:(this.line<100?4:(this.line<1000?3:2)))] A_LoopField
+		}Loop,parse,data,`n,% ("",Assign2:=this.line)
+			Assign3:=SubStr(A_LoopField,1,InStr(A_LoopField,".")-1),this.line++,Assign1:=RegExReplace(SubStr(A_LoopField,InStr(A_LoopField,".")+1),"(" (SubStr(Assign3,InStr(Assign3,">",0,0)+1)<10?"&nbsp;&nbsp;&nbsp;":(SubStr(Assign3,InStr(Assign3,">",0,0)+1)<100?"&nbsp;&nbsp;":(SubStr(Assign3,InStr(Assign3,">",0,0)+1)<1000?"&nbsp;":""))) "&nbsp;&nbsp;)(.*)","$2"),textO.=SubStr(Assign3,1,InStr(Assign3,">",0,0)) SubStr(Assign3,InStr(Assign3,">",0,0)+1)+Assign2 "." this.Check2[(this.line<10?5:(this.line<100?4:(this.line<1000?3:2)))] Assign1
 		ListLines,% ("On",%Temp_%.write(textO),%Temp_%.getElementById("bod").scrollIntoView(scroll))
 	}
 	pull()
@@ -319,7 +318,7 @@ st_printArr(array,depth:=10,indentLevel:="&nbsp;&nbsp;&nbsp;")
 {	static parent,pArr,depthP
 	For k,v in (Array,(!IsObject(pArr)?pArr:=[]:""),(!depthP?depthP:=depth:""))
 		((depthP=depth||depthP<depth)?parent:=SubStr(a:=SubStr(parent,1,InStr(parent,",",0,0)-1),1,InStr(a,",",0,0)):""),k:=RegExReplace(k,","),list.=(indentLevel "arr[" pArr[depth]:=parent (k&1=""?"""" k """":k) "]"),((IsObject(v)&&depth>1)?(parent.=k ",",depthP:=depth,list.="`n" st_printArr(v,depth-1,indentLevel "&nbsp;&nbsp;&nbsp;")):list.=" = " v),list.="`n"
-	return RTrim(list,"`n<br/>")
+	return RTrim(list,"`n")
 }
 AL_Columnize(Data,delim="csv",justify=1,pad=" ",colsep=" | ") ;Credit @ tidbit,compacted reduced code by AfterLemon
 {	Loop,parse,Data,`n,% ("`r",width:=[],Arr:=[],(InStr(justify,"|")?colMode:=StrSplit(justify,"|"):colMode:=justify))
